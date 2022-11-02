@@ -1,0 +1,50 @@
+@import '../../shared/colors.scss';
+
+.header {
+    height: 64px;
+    background-color:$navbar-background-color;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 64px;
+    padding-right: 64px;
+
+    .logo {
+        height: 64px;
+        width: 64px;
+        
+
+        .img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+
+    .nav-btn {
+        color: $navbar-button-color;
+    }
+    .nav-btn:hover {
+        color: $btn-hover-dark;
+        background-color: transparent;
+    }
+
+    .signin-btn {
+        color: $navbar-button-color;
+        font-weight: 600;
+    }
+        .signin-btn:hover {
+            color: $btn-hover-dark;
+            font-weight: 600;
+        }
+    
+    .signup-btn {
+        font-weight: 600;
+    }
+        .signup-btn:hover {
+            font-weight: 600;
+            color: $plain-white;
+            background-color: $btn-hover-dark;
+            border-color: $btn-hover-dark;
+        }
+}
