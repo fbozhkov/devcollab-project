@@ -1,0 +1,11 @@
+@import '../../../shared/colors.scss';
+
+.btn {
+    color: $navbar-button-color;
+    font-weight: 600;
+
+    &:hover {
+        color: $btn-hover-dark;
+        font-weight: 600;
+    }
+}

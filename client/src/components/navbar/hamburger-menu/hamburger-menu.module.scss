@@ -1,0 +1,25 @@
+.wrapper {
+    top: 64px !important;
+    height: calc(100vh - 64px) !important;
+}
+
+.nav-btn {
+    color:black;
+    margin-bottom: 16px;
+}
+.content {
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.sign {
+    margin-top:16px;
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+}
+
+.sign-in{
+    margin-bottom: 16px;
+}

@@ -1,0 +1,85 @@
+@import '../../shared/colors.scss';
+
+.header {
+    height: 64px;
+    background-color:$navbar-background-color;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+
+    .logo {
+        height: 64px;
+        width: 64px;
+        flex-basis: 0;
+        flex-grow: 1;
+        
+        .img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+    
+    .navigation{
+        flex: 3;
+    }
+
+    .login-profile{
+        display: flex;
+        flex-basis: 0;
+        flex-grow: 1;
+    }
+
+    .nav-btn {
+        color: $navbar-button-color;
+        &:hover {
+            color: $btn-hover-dark;
+            background-color: transparent;
+        }
+    }
+
+    .signin-btn {
+        color: $navbar-button-color;
+        font-weight: 600;
+        &:hover {
+            color: $btn-hover-dark;
+            font-weight: 600;
+        }
+    }
+    
+    .signup-btn {
+        font-weight: 600;
+        &:hover {
+            font-weight: 600;
+            color: $plain-white;
+            background-color: $btn-hover-dark;
+            border-color: $btn-hover-dark;
+        }
+    }
+
+    .hamburger {
+        display: none;
+    }
+
+    @media (max-width: 900px) {
+        .logo{
+            display: flex;
+            float: left;
+            margin-left: 5%;
+        }
+        .navigation{
+            display: none;
+        }
+
+        .login-profile{
+            display: none;
+        }
+
+        .hamburger {
+            display: flex;
+            float: right;
+            margin-right: 5%;
+        }
+    }
+}
