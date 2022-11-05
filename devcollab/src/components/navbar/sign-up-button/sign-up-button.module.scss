@@ -1,0 +1,12 @@
+@import '../../../shared/colors.scss';
+
+.btn {
+    font-weight: 600;
+
+    &:hover {
+        font-weight: 600;
+        color: $plain-white;
+        background-color: $btn-hover-dark;
+        border-color: $btn-hover-dark;
+    }
+}
