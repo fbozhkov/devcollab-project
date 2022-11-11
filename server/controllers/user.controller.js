@@ -3,8 +3,9 @@ import bcrypt from "bcrypt";
 import axios from 'axios';
 import cloudinary from "../config/cloudinary.config.js";
 import * as streamifier from 'streamifier';
-import UserService from "../services/user.service.js";
 import { authorizeUser } from "../middleware/auth.js";
+
+import UserService from "../services/user.service.js";
 
 const userController = express.Router();
 
@@ -24,7 +25,7 @@ userController.post('/sign-up', async (req, res) => {
         userData["success"] = 1;
         res.status(200).json(userData);
     }
-    catch(e) {
+    catch(e){
         console.log('catch block');
         console.log(e);
         res.status(Number(e.status)).json(e);
@@ -103,6 +104,7 @@ userController.put('/changeUserPassword', authorizeUser, async (req,res) => {
 
 userController.get('/getAllUsers', async (req, res) => {
     const users = await UserService.getAllUsers();
+    console.log('users?',users);
     if (users) {
         res.status(200).json(users);
     }
@@ -174,7 +176,6 @@ userController.get('/getAdditionalInfo/:id', async (req, res) => {
 })
 
 userController.delete('/deleteAllUsers', async (req, res) => {
-    const deleteSessions = await UserService.deleteAllSessions();
     const result = await UserService.deleteAllUsers();
 
     if (result === 'all users deleted') {
