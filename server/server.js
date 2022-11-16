@@ -1,35 +1,34 @@
+import express from 'express';
+import  path from 'path';
+import { fileURLToPath } from 'url';
 import cors from 'cors';
-import express from 'express'
+import userController from './controllers/user.controller.js'
+import * as dotenv from 'dotenv'
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const port = process.env.PORT;
 
 const app = express();
 
-let users = [];
+const corsConfig = {
+    origin: ["https://devcollab.netlify.app", "http://localhost:3000"],
+    credentials: true,
+    methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+    allowedHeaders: ['Content-Type']
+};
 
-app.use(cors());
+app.use(cors(corsConfig));
 app.use(express.json());
+app.use(express.static(__dirname + 'public'))
 
-app.get('/api/getAllUsers', (req, res) => {
-    if (users) {
-        res.status(200).json(users);
-    }
-    else {
-        res.send({ "msg" : "No users"});
-    }
+app.get('/', (req, res) => {
+    res.sendFile(path.resolve(__dirname,'./public/server.html'))
 })
+app.use('/api/users', userController);
 
-app.post('/api/sign-up', (req, res) => {
-    console.log(req.body);
-    const user = req.body;
-    users.push(user);
-})
-
-app.delete('/api/deleteAllUsers', (req, res) => {
-    if (users) {
-        users = [];
-        res.status(200);
-    }
-})
-
-app.listen(5000, () => {
-    console.log('server listening on port 5000')
+app.listen(port, () => {
+    console.log(`server listening on port ${port}`)
 })

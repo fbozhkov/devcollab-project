@@ -6,7 +6,8 @@ import {
 } from '@mui/material'
 import styles from './sign-up-dialog.module.scss'
 
-const baseUrl = 'http://localhost:5000';
+const baseUrl = process.env.REACT_APP_API;
+console.log(`api url:${process.env.REACT_APP_API}`);
 
 const SignUpDialog = (props) => {
 
@@ -89,7 +90,7 @@ const SignUpDialog = (props) => {
         e.preventDefault();
         if (formValidation()) {
             console.log('form is valid')
-            axios.post(`${baseUrl}/api/sign-up`, {
+            axios.post(`${baseUrl}/api/users/sign-up`, {
                 email: email,
                 password: password,
                 userName: userName
