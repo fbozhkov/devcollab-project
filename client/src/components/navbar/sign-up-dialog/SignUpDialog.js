@@ -13,12 +13,15 @@ const SignUpDialog = (props) => {
 
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState(false);
+    const [emailErrorMessage, setEmailErrorMessage] = useState('');
     const [userName, setUserName] = useState('');
     const [userNameError, setUserNameError] = useState(false);
+    const [userNameErrorMessage, setUserNameErrorMessage] = useState('');
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState(false);
     const [repeatPasswordError, setRepeatPasswordError] = useState(false);
     const [repeatPassword, setRepeatPassword] = useState('');
+    const [userIsSignedUp, setUserIsSignedUp] = useState(false);
 
     const emailRegEx = (/\S+@\S+\.\S+/);
     const passwordRegEx = (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/);
@@ -55,6 +58,7 @@ const SignUpDialog = (props) => {
     const formValidation = () => {
         if (emailRegEx.test(email) === false) {
             setEmailError(true);
+            setEmailErrorMessage('Invalid email');
             return false;
         }
         if (emailRegEx.test(email)) {
@@ -77,6 +81,8 @@ const SignUpDialog = (props) => {
         if (userNameRegEx.test(userName) === false) {
             console.warn('username error')
             setUserNameError(true);
+            setUserNameErrorMessage(
+                'Username must be between 4 and 30 characters long and contain only alphanumeric values');
             return false;
         }
         if (userNameRegEx.test(userName)) {
@@ -94,8 +100,24 @@ const SignUpDialog = (props) => {
                 email: email,
                 password: password,
                 userName: userName
-            });
-            window.location.reload(false)
+            })
+            .then((response) => {
+                console.log(`response data: ${response.status}`);
+                response.status === 200 && setUserIsSignedUp(true);
+                window.location.reload(false);
+            })
+            .catch((error) => {
+                setUserIsSignedUp(false);
+                if (error.response.data.errorOrigin === 'email'){
+                    setEmailError(true);
+                    setEmailErrorMessage(error.response.data.message);
+                }
+                if (error.response.data.errorOrigin === 'username'){
+                    console.warn('server username error')
+                    setUserNameError(true);
+                    setUserNameErrorMessage(error.response.data.message);
+                }
+            })
         }
         else {
             console.log('form is INVALID')
@@ -118,7 +140,7 @@ const SignUpDialog = (props) => {
                             label="Email" 
                             variant="outlined"
                             error = {emailError}
-                            helperText= {emailError ? "Invalid email" : ""}
+                            helperText={emailError ? emailErrorMessage : ""}
                             onChange={handleEmail} />
                         <TextField className={styles['form-field']}
                             hidden type='password'
@@ -145,7 +167,7 @@ const SignUpDialog = (props) => {
                             label="Username" 
                             variant="outlined"
                             error={userNameError}
-                            helperText={userNameError ? "Username must be between 4 and 30 characters long and contain only alphanumeric values " : ""}
+                            helperText={userNameError ? userNameErrorMessage : ""}
                             onChange={handleUserName}/>
                         
                     </Box>

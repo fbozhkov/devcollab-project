@@ -6,7 +6,6 @@ import './mainpage.scss'
 const Mainpage = () => {
     const [users, setUsers] = useState([]);
     const baseUrl = process.env.REACT_APP_API;
-    console.log(`baseURL: ${baseUrl}`)
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 20 },
@@ -27,10 +26,10 @@ const Mainpage = () => {
             })
     }
 
-    /* const deleteUsers = () => {
-        axios.delete((`${baseUrl}/api/deleteAllUsers`));
+    const deleteUsers = () => {
+        axios.delete(`${baseUrl}/api/users/deleteAllUsers`);
         window.location.reload(false)
-    } */
+    }
 
     return(
         <div className='main-page'>
@@ -52,7 +51,7 @@ const Mainpage = () => {
             </div>
 
             <div>
-                <button type="button" /* onClick={deleteUsers} */> Delete users </button>
+                <button type="button" onClick={deleteUsers}> Delete users </button>
             </div>
         </div>
     )
