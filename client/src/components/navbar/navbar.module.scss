@@ -25,21 +25,10 @@
         flex: 3;
     }
 
-    .signin-signup{
+    .login-profile{
         display: flex;
         flex-basis: 0;
         flex-grow: 1;
-    }
-
-    .profile {
-        display: flex;
-        flex-basis: 0;
-        flex-grow: 1;
-        justify-content: center;
-    }
-
-    .profile-icon{
-        font-size: 32px;
     }
 
     .nav-btn {
@@ -83,11 +72,7 @@
             display: none;
         }
 
-        .signin-signup{
-            display: none;
-        }
-
-        .profile-icon{
+        .login-profile{
             display: none;
         }
 

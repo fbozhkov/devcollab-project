@@ -11,11 +11,12 @@ const SignInButton = () => {
     };
 
     return (
-        <div>
-            <Button className={styles.btn} onClick={handleSignInClickOpen}> Sign in </Button>
-            <SignInDialog open={openSignInDialog} setOpen={setOpenSignInDialog} />
-        </div>
-        
+        <StyledEngineProvider injectFirst={true}>
+            <div>
+                <Button className={styles.btn} onClick={handleSignInClickOpen}> Sign in </Button>
+                <SignInDialog open={openSignInDialog} setOpen={setOpenSignInDialog} />
+            </div>
+        </StyledEngineProvider>
      
     );
 }
