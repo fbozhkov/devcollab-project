@@ -4,7 +4,6 @@ import axios from 'axios';
 import cloudinary from "../config/cloudinary.config.js";
 import * as streamifier from 'streamifier';
 import { authorizeUser } from "../middleware/auth.js";
-
 import UserService from "../services/user.service.js";
 
 const userController = express.Router();
@@ -57,7 +56,7 @@ userController.post('/sign-in', async (req,res) => {
     console.log(req.body)
     try {
         const auth = await UserService.signInUser(req.body.email, req.body.password)
-        res.cookie('sessionID', auth.session_id, { expires: auth.session_expiration_date, sameSite: 'None', secure: true, httpOnly: true})
+        res.cookie('sessionID', auth.session_id, { expires: auth.session_expiration_date, sameSite: "none", httpOnly:true})
         res.status(200).json({'authentication': auth, 'message': 'Authentication succeeded!', 'success': 1})
     }
     catch(e) {
@@ -76,7 +75,7 @@ userController.put('/additionalInfo', authorizeUser, async (req,res) => {
 })
 
 userController.get('/log-out', async (req,res) => {
-    res.cookie('sessionID', 'none', { expires: new Date(Date.now()), sameSite: 'None', secure: true, httpOnly: true })
+    res.cookie('sessionID', 'none', { expires: new Date(Date.now()), sameSite: "none", httpOnly: true })
     res.status(200).json({message: 'Successfully logged out'});
 })
 
