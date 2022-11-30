@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState } from "react";
 import axios from "axios";
 import {
     Button, Box, Dialog, DialogActions, DialogContent, DialogContentText,
@@ -7,7 +7,6 @@ import {
 import styles from './sign-up-dialog.module.scss'
 
 const baseUrl = process.env.REACT_APP_API;
-console.log(`api url:${process.env.REACT_APP_API}`);
 
 const SignUpDialog = (props) => {
 
@@ -21,7 +20,6 @@ const SignUpDialog = (props) => {
     const [passwordError, setPasswordError] = useState(false);
     const [repeatPasswordError, setRepeatPasswordError] = useState(false);
     const [repeatPassword, setRepeatPassword] = useState('');
-    const [userIsSignedUp, setUserIsSignedUp] = useState(false);
 
     const emailRegEx = (/\S+@\S+\.\S+/);
     const passwordRegEx = (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/);
@@ -103,11 +101,11 @@ const SignUpDialog = (props) => {
             })
             .then((response) => {
                 console.log(`response data: ${response.status}`);
-                response.status === 200 && setUserIsSignedUp(true);
-                window.location.reload(false);
+                response.status === 200 && props.setSigned(true);
+                props.setOpen(false);
             })
             .catch((error) => {
-                setUserIsSignedUp(false);
+                props.setSigned(false);
                 if (error.response.data.errorOrigin === 'email'){
                     setEmailError(true);
                     setEmailErrorMessage(error.response.data.message);
