@@ -29,8 +29,7 @@ userController.post('/sign-in', async (req,res) => {
     console.log(req.body)
     try {
         const auth = await UserService.signInUser(req.body.email, req.body.password)
-        res.cookie('sessionID', auth.session_id, { expires: auth.session_expiration_date, httpOnly:true})
-        res.cookie('random cookie', 'random value');
+        res.cookie('sessionID', auth.session_id, { expires: auth.session_expiration_date, sameSite: 'None', secure: true, httpOnly: true})
         res.status(200).json({'authentication': auth, 'message': 'Authentication succeeded!', 'success': 1})
     }
     catch(e) {
@@ -40,7 +39,7 @@ userController.post('/sign-in', async (req,res) => {
 })
 
 userController.get('/log-out', async (req,res) => {
-    res.cookie('sessionID', 'none', { expires: new Date(Date.now()), httpOnly: true })
+    res.cookie('sessionID', 'none', { expires: new Date(Date.now()), sameSite: 'None', secure: true, httpOnly: true })
     res.status(200).json({message: 'Successfully logged out'});
 })
 

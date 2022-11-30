@@ -41,7 +41,9 @@ const Navbar = () => {
             .catch((error) => {
                 console.log(error)
             })
+        setTimeout(() => {
             window.location.reload(false);
+        }, 300)
     }
 
     const [anchorEl, setAnchorEl] = useState(null);
