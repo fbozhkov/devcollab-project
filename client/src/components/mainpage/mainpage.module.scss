@@ -1,19 +1,200 @@
 @import '../../shared/colors.scss';
 
 .main-page{
-    background-color: $main-background-color;
+    /* background-color: $main-background-color; */
     height: 100vh;
 }
 
-.wrapper {
-    max-width:1440px;
+.ellipse-gradient {
+    position: absolute;
+    width: 706px;
+    height: 706px;
+    left: -464.01px;
+    top: -330px;
+    z-index: -1;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(0, 194, 255, 0.35) 0%, rgba(65, 239, 255, 0) 100%);
+    transform: rotate(2.19deg);
+}
+
+.projects-div {
+    background-image: url(bubble1.svg);
+    background-position: left bottom;
+    background-position-x: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 560px;
+
+    @media (max-width:900px) {
+        height: 460px;
+    }
+}
+
+.projects-content {
+    max-width: 1440px;
     margin: 0 auto;
+    padding-top: 78px;
+    background-image: url(Cube8L.png), url(Cube4R.png);
+    background-repeat: no-repeat, no-repeat;
+    background-size: 187px 187px, 221px 229px;
+    background-position-x: calc(50% - 500px) , calc(50% + 500px);
+    background-position-y: 300px, 270px;
+
+    @media (max-width: 900px) {
+        max-width: 80%;
+        background-image: url(Cube4Rotate.png);
+        background-size: 150px 150px;
+        background-position-x: calc(50% + 100px);
+        background-position-y: 280px;
+    }
 }
 
-.intro {
-    padding-top: 64px;
+.projects-small-heading-div {
+    width: 100%;
 }
 
-.header {
-    margin-top: 32px;
+.projects-small-heading-font {
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $projects-small-heading;
+
+    @media (max-width: 900px) {
+        text-align: left;
+        font-weight: 500;
+        font-size: 10px;
+    }
+}
+
+.projects-heading-div {
+    padding-top: 28px;
+    max-width: 1173px;
+    margin: 0 auto;
+
+    @media (max-width: 900px) {
+        max-width: 80vw;
+    }
+}
+
+.projects-heading-font {
+    font-weight: 500;
+    font-size: 60px;
+    line-height: 78px;
+    letter-spacing: -0.04em;
+
+    @media (max-width: 900px) {
+        text-align: left;
+        font-size: 24px;
+        line-height: 36px;
+    }
+}
+
+.projects-button-div {
+    padding-top: 60px;
+    height: 200px;
+    
+    @media (max-width: 900px) {
+        padding-top: 40px;
+    }
+}
+
+.projects-button {
+    text-transform: none;
+    font-size: 20px;
+    line-height: 32px;
+    letter-spacing: -0.02em;
+    background-color: $projects-button;
+    border-radius: 88px;
+    width: 480px;
+    height: 50px;
+
+    @media(max-width: 900px) {
+        font-size: 15px;
+        line-height: 16px;
+        letter-spacing: 0.05;
+        display: flex;
+        
+        height: 40px;
+        width: 207px;
+    }
+}
+
+.create-projects-div {
+    background-color: $create-projects-background;
+    width:100%;
+    height:560px;
+}
+
+.create-projects-content {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding-top: 100px;
+    background-image: url(Cube1B.png);
+    background-repeat: no-repeat;
+    background-size: 251px 251px;
+    background-position-x: calc(50% + 500px);
+    background-position-y: 235px;
+
+    @media (max-width: 900px) {
+        max-width: 80%;
+        background-image: url(Cube1B.png);
+        background-size: 150px 150px;
+        background-position-x: calc(50% + 100px);
+        background-position-y: 280px;
+    }
+}
+
+.create-project-heading-div {
+    max-width: 964px;
+    margin: 0 auto;
+    
+    @media (max-width: 900px) {
+        max-width: 80vw;
+    }
+}
+
+.create-projects-heading-font {
+    color: $plain-white;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 78px;
+    letter-spacing: -0.04em;
+
+    @media (max-width: 900px) {
+        text-align: left;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 36px;
+    }
+}
+
+.create-projects-button-div {
+    padding-top: 68px;
+    height: 200px;
+
+    @media (max-width: 900px) {
+        padding-top: 40px;
+    }
+}
+
+.create-projects-button {
+    text-transform: none;
+    font-size: 20px;
+    line-height: 32px;
+    letter-spacing: -0.02em;
+    background-color: $create-projects-button;
+    border-radius: 88px;
+    width: 480px;
+    height: 50px;
+
+    @media (max-width:900px) {
+        font-size: 15px;
+        line-height: 16px;
+        letter-spacing: 0.05;
+        display: flex;
+        
+        height: 40px;
+        width: 229px;
+    }
 }
