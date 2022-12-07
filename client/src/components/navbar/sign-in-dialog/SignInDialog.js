@@ -6,11 +6,13 @@ import {
     DialogTitle, TextField, Typography
 } from '@mui/material'
 import styles from './sign-in-dialog.module.scss'
+import { HamburgerContext } from "../../../contexts/HamburgerContext";
 
 const baseUrl = process.env.REACT_APP_API;
 
 const SignInDialog = (props) => {
     const { setUser } = useContext(UserContext);
+    const { setOpen } = useContext(HamburgerContext)
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -47,6 +49,7 @@ const SignInDialog = (props) => {
             console.log(userIsLogged)
             props.setOpen(false);
             setUser(userIsLogged);
+            setOpen(false);
             window.localStorage.setItem('uli', userIsLogged);
         })
         .catch((error) => {

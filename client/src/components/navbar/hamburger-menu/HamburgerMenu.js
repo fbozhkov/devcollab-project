@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../../contexts/UserContext';
+import { HamburgerContext } from '../../../contexts/HamburgerContext';
 import {
     Button, IconButton, Dialog, DialogContent, Slide
 } from '@mui/material';
@@ -21,6 +22,32 @@ const HamburgerMenu = () => {
 
     const [open, setOpen] = React.useState(false);
 
+    let navigate = useNavigate();
+
+    const projectsRoute = () => {
+        let path = `/projects`;
+        navigate(path);
+        setOpen(false);
+    }
+
+    const createProjectRoute = () => {
+        let path = `/create-project`;
+        navigate(path);
+        setOpen(false);
+    }
+
+    const aboutRoute = () => {
+        let path = `/about`;
+        navigate(path);
+        setOpen(false);
+    }
+
+    const profileRoute = () => {
+        let path = `/profile`;
+        navigate(path);
+        setOpen(false);
+    }
+
     const logOut = () => {
         axios.get(`${baseUrl}/api/users/log-out`, { withCredentials: true })
             .then((response) => {
@@ -29,7 +56,9 @@ const HamburgerMenu = () => {
             .catch((error) => {
                 console.log(error)
             })
-        window.location.reload(false);
+        setTimeout(() => {
+            window.location.reload(false);
+        }, 300)
     }
 
     const handleClickOpen = () => {
@@ -42,6 +71,7 @@ const HamburgerMenu = () => {
 
     return (
         <div>
+            <HamburgerContext.Provider value={{ open, setOpen }}>
             <IconButton onClick={handleClickOpen}>
                 <MenuIcon />
             </IconButton>
@@ -53,12 +83,12 @@ const HamburgerMenu = () => {
                 TransitionComponent={Transition}
             >
                 <DialogContent className={styles.content}>
-                    <Button className={styles['nav-btn']} component={Link} to="/projects"> projects </Button>
-                    <Button className={styles['nav-btn']} component={Link} to="/create-project"> create </Button>
-                    <Button className={styles['nav-btn']} component={Link} to="/about"> about </Button>
+                    <Button className={styles['nav-btn']} onClick={projectsRoute}> projects </Button>
+                    <Button className={styles['nav-btn']} onClick={createProjectRoute}> create </Button>
+                    <Button className={styles['nav-btn']} onClick={aboutRoute}> about </Button>
                     {user ?
                         <div className={styles.content}>                            
-                            <Button type='button' component={Link} to='/profile'> Profile</Button>
+                            <Button type='button' onClick={profileRoute}> Profile</Button>
                             <Button type='button' onClick={logOut}>Log out</Button>
                         </div>
                         :
@@ -69,6 +99,7 @@ const HamburgerMenu = () => {
                     }
                 </DialogContent>
             </Dialog>
+            </HamburgerContext.Provider> 
         </div>
     );
 }
