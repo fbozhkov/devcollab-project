@@ -1,7 +1,6 @@
 @import '../../shared/colors.scss';
 
 .main-page{
-    /* background-color: $main-background-color; */
     height: 100vh;
 }
 
@@ -16,7 +15,7 @@
     transform: rotate(2.19deg);
 }
 
-.projects-div {
+.create-projects-div {
     background-image: url(bubble1.svg);
     background-position: left bottom;
     background-position-x: center;
@@ -29,18 +28,23 @@
     }
 }
 
-.projects-content {
-    max-width: 1440px;
-    margin: 0 auto;
-    padding-top: 78px;
+.cubes-create-projects {
+    height: 100%;
+    width: 100%;
     background-image: url(Cube8L.png), url(Cube4R.png);
     background-repeat: no-repeat, no-repeat;
     background-size: 187px 187px, 221px 229px;
-    background-position-x: calc(50% - 500px) , calc(50% + 500px);
+    background-position-x: calc(50% - 450px) , calc(50% + 450px);
     background-position-y: 300px, 270px;
 
     @media (max-width: 900px) {
-        max-width: 80%;
+        background-image: url(Cube4Rotate.png);
+        background-size: 200px 200px;
+        background-position-x: calc(50% + 25vw);
+        background-position-y: 240px;
+    }
+
+    @media (max-width: 480px) {
         background-image: url(Cube4Rotate.png);
         background-size: 150px 150px;
         background-position-x: calc(50% + 100px);
@@ -48,11 +52,21 @@
     }
 }
 
-.projects-small-heading-div {
+.create-projects-content {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding-top: 78px;
+    
+    @media (max-width: 900px) {
+        max-width: 80%;
+    }
+}
+
+.create-projects-small-heading-div {
     width: 100%;
 }
 
-.projects-small-heading-font {
+.create-projects-small-heading-font {
     font-weight: 600;
     font-size: 17px;
     line-height: 16px;
@@ -67,17 +81,21 @@
     }
 }
 
-.projects-heading-div {
+.create-projects-heading-div {
     padding-top: 28px;
+    padding-left: 32px;
+    padding-right: 32px;
     max-width: 1173px;
     margin: 0 auto;
 
     @media (max-width: 900px) {
         max-width: 80vw;
+        padding-left: 0px;
+        padding-right: 0px;
     }
 }
 
-.projects-heading-font {
+.create-projects-heading-font {
     font-weight: 500;
     font-size: 60px;
     line-height: 78px;
@@ -90,7 +108,7 @@
     }
 }
 
-.projects-button-div {
+.create-projects-button-div {
     padding-top: 60px;
     height: 200px;
     
@@ -99,7 +117,7 @@
     }
 }
 
-.projects-button {
+.create-projects-button {
     text-transform: none;
     font-size: 20px;
     line-height: 32px;
@@ -120,16 +138,13 @@
     }
 }
 
-.create-projects-div {
+.projects-div {
     background-color: $create-projects-background;
     width:100%;
     height:560px;
 }
 
-.create-projects-content {
-    max-width: 1440px;
-    margin: 0 auto;
-    padding-top: 100px;
+.cubes-projects {
     background-image: url(Cube1B.png);
     background-repeat: no-repeat;
     background-size: 251px 251px;
@@ -137,15 +152,31 @@
     background-position-y: 235px;
 
     @media (max-width: 900px) {
-        max-width: 80%;
+        background-image: url(Cube1B.png);
+        background-size: 200px 200px;
+        background-position-x: calc(50% + 25vw);
+        background-position-y: 260px;
+    }
+
+    @media (max-width: 480px) {
         background-image: url(Cube1B.png);
         background-size: 150px 150px;
-        background-position-x: calc(50% + 100px);
-        background-position-y: 280px;
+        background-position-x: calc(50% + 80px);
+        background-position-y: 360px;
     }
 }
 
-.create-project-heading-div {
+.projects-content {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding-top: 100px;
+
+    @media (max-width: 900px) {
+        max-width: 80%;
+    }
+}
+
+.project-heading-div {
     max-width: 964px;
     margin: 0 auto;
     
@@ -154,7 +185,7 @@
     }
 }
 
-.create-projects-heading-font {
+.projects-heading-font {
     color: $plain-white;
     font-weight: 500;
     font-size: 40px;
@@ -169,16 +200,21 @@
     }
 }
 
-.create-projects-button-div {
+.projects-button-div {
     padding-top: 68px;
-    height: 200px;
+    height: 230px;
 
     @media (max-width: 900px) {
         padding-top: 40px;
     }
+
+    @media (max-width: 480px) {
+        padding-top: 40px;
+        height: 250px;
+    }
 }
 
-.create-projects-button {
+.projects-button {
     text-transform: none;
     font-size: 20px;
     line-height: 32px;
