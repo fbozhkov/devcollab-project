@@ -1,7 +1,7 @@
 import { React, useEffect , useState, useContext } from 'react'
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
-import { Button, Typography } from '@mui/material';
+import { Button, Typography, StyledEngineProvider } from '@mui/material';
 import axios from 'axios'
 import styles from './mainpage.module.scss';
 import Projects from '../projects/Projects';
@@ -13,16 +13,49 @@ const Mainpage = () => {
     const baseUrl = process.env.REACT_APP_API;
 
     return(
+        <StyledEngineProvider injectFirst={true}>
         <div className={styles['main-page']}>
+            
             <div className={styles['wrapper']}> 
-                 <div className={styles.intro}>
-                    <Typography variant='h2'>Are you looking for fellow developers to collaborate on your project?</Typography>
-                    <Button className={styles.header} component={Link} to="/projects"> Post your project idea </Button>
-                    <Typography variant='h2'>Are you looking for an interesting project to put your knowledge into practice?</Typography>
-                    <Button className={styles.header} component={Link} to="/create-project"> Check available projects </Button>
-                </div>
+                
+                    <div className={styles['create-projects-div']}>
+                        <div className={styles['ellipse-gradient']} />
+                        <div className={styles['cubes-create-projects']}>
+                            <div className={styles['create-projects-content']}>
+                                <div className={styles['create-projects-small-heading-div']}>
+                                    <Typography className={styles['create-projects-small-heading-font']}> The future belongs to teamwork</Typography>
+                                </div>
+                                <div className={styles['create-projects-heading-div']}>
+                                    <Typography className={styles['create-projects-heading-font']}>Are you looking for fellow developers to collaborate on your project?</Typography>
+                                </div>
+                                <div className={styles['create-projects-button-div']}>
+                                    <Button 
+                                        className={styles['create-projects-button']}
+                                        component={Link} to="/create-project"
+                                        variant='contained'> Post your project idea </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={styles['projects-div']}>
+                        <div className={styles['cubes-projects']}>
+                            <div className={styles['projects-content']}>
+                                <div className={styles['project-heading-div']}>
+                                    <Typography className={styles['projects-heading-font']}>Are you looking for an interesting project to put your knowledge into practice?</Typography>
+                                </div>
+                                <div className={styles['projects-button-div']}>
+                                    <Button className={styles['projects-button']}
+                                        component={Link} to="/projects"
+                                        variant='contained'> Check available projects </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
             </div>
         </div>
+        </StyledEngineProvider>
     )
 }
 
