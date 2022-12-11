@@ -13,7 +13,7 @@ const Mainpage = () => {
     const baseUrl = process.env.REACT_APP_API;
 
     return(
-        <StyledEngineProvider injectFirst={true}>
+        
         <div className={styles['main-page']}>
             
             <div className={styles['wrapper']}> 
@@ -55,7 +55,6 @@ const Mainpage = () => {
                 
             </div>
         </div>
-        </StyledEngineProvider>
     )
 }
 

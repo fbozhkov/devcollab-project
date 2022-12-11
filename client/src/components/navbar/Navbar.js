@@ -17,12 +17,13 @@ const Navbar = () => {
 
     useEffect(() => {
         const data = window.localStorage.getItem('uli')
+        console.log(`data: ${data}`)
         setUser(data)
-        validateUser()
+        validateUser(data)
     }, [])
 
-    const validateUser = () => {
-        if(user) {
+    const validateUser = (localStorageData) => {
+        if (localStorageData) {
             axios.get(`${baseUrl}/api/users/validateUser`, { withCredentials: true })
                 .then((response) => {
                     setUser(1)
@@ -30,6 +31,9 @@ const Navbar = () => {
                 .catch((error) => {
                     window.localStorage.removeItem('uli');
                 })
+            setTimeout(() => {
+                window.location.reload(false);
+            }, 300)
         }
     }
 
@@ -57,7 +61,7 @@ const Navbar = () => {
     };
 
     return (
-        <StyledEngineProvider injectFirst={true}>
+        
         <div className={styles.header}>
             <div className={styles.logo}>
                 <Link to='/'>
@@ -95,7 +99,6 @@ const Navbar = () => {
                 <HamburgerMenu />
             </div>
         </div>
-        </StyledEngineProvider>
     );
 }
 export default Navbar

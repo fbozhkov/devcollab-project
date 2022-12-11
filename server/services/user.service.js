@@ -83,7 +83,7 @@ export default class UserService {
         if (passwordMatch) {
             const sessionID = uuidv4();
             const now = new Date();
-            const expirationDate = new Date(+now + 3 * 24 * 60 * 60 * 1000); //1 day
+            const expirationDate = new Date(+now + 3 * 24 * 60 * 60 * 1000);
             const session = {
                 user_id: user.id,
                 session_id: sessionID,
@@ -107,7 +107,6 @@ export default class UserService {
                 session_id: sessionID
             }
         })
-        console.log(`USERRRR: ${userSession}`)
         if (userSession) {
             return userSession.session_id
         }
@@ -125,12 +124,11 @@ export default class UserService {
         })
         if (userSession) {
             const user = await User.findOne({
-                attributes: ['username', 'email'],
+                attributes: ['id','username', 'email'],
                 where: {
                     id: userSession.user_id
                 }
             })
-        console.log(`username: ${user.username}`)
         return user;
         }
         else {
