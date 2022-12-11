@@ -6,7 +6,7 @@ import { UserContext } from './contexts/UserContext';
 import Navbar from './components/navbar/Navbar';
 import Mainpage from './components/mainpage/Mainpage';
 import About from './components/about/About';
-import Profile from './profile/Profile';
+import Profile from './components/profile/Profile';
 import Projects from './components/projects/Projects';
 import CreateProject from './components/create-project/CreateProject';
 import Footer from './components/footer/Footer';

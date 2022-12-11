@@ -46,11 +46,11 @@ const SignInDialog = (props) => {
             console.log('>>>>>>>setUser 3')
             
             const userIsLogged = JSON.stringify(response.data?.success)
+            window.localStorage.setItem('uli', userIsLogged);
             console.log(userIsLogged)
             props.setOpen(false);
             setUser(userIsLogged);
             setOpen(false);
-            window.localStorage.setItem('uli', userIsLogged);
         })
         .catch((error) => {
             console.log(error.response.data)

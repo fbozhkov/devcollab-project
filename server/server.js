@@ -3,6 +3,7 @@ import  path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
 import userController from './controllers/user.controller.js'
+import projectController from './controllers/project.controller.js';
 import * as dotenv from 'dotenv'
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname,'./public/server.html'))
 })
 app.use('/api/users', userController);
+app.use('/api/projects', projectController);
 
 app.listen(port, () => {
     console.log(`server listening on port ${port}`)
