@@ -11,16 +11,39 @@ projectController.post('/post-project', authorizeUser, async (req,res) => {
         creator_id: req.userID,
         project_title: req.body.projectName,
         project_description: req.body.projectDescription,
-        project_tags: req.body.projectTags
     }
+    const projectTags = req.body.projectTags;
     try {
-        await ProjectService.postProject(projectData)
+        await ProjectService.postProject(projectData, projectTags);
     }
-    catch(error){
-        console.log(error.message)
-        res.status(500)
+    catch(error) {
+        console.log(error.message);
+        res.status(500);
     }
     res.status(200).json(req.user);
+})
+
+projectController.get('/get-all-projects', async (req,res) => {
+    try {
+        const projects = await ProjectService.getAllProjects();
+        res.status(200).json(projects);
+    }
+    catch(error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
+    
+})
+
+projectController.get('/project-info/:id', async (req,res) => {
+    try {
+        const project = await ProjectService.getProjectById(req.params['id'])
+        res.status(200).json(project);
+    }
+    catch(error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
 })
 
 export default projectController

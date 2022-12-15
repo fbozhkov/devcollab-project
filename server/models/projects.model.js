@@ -1,5 +1,5 @@
 import db from "../config/db.config.js";
-import User from './user.model.js'
+import User from './user.model.js';
 import { Sequelize, DataTypes } from "sequelize";
 
 const Projects = db.sequelize.define (
@@ -31,11 +31,6 @@ const Projects = db.sequelize.define (
             allowNull: false
         },
 
-        project_tags: {
-            type: Sequelize.DataTypes.ARRAY(DataTypes.STRING),
-            allowNull: true
-        },
-
         creation_date: {
             type: Sequelize.DataTypes.DATE,
             allowNull: false,
@@ -51,4 +46,5 @@ const Projects = db.sequelize.define (
     timestamps: false
     }
 )
+
 export default Projects

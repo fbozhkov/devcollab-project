@@ -5,12 +5,12 @@
     height: 200vh;
 }
 
-.create-project {
+.project {
     max-width: 75vw;
     margin: 0 auto;
 }
 
-.input-fields-div {
+.project-details-div {
     width: 100%;
     height: 600px;
     background-color: $plain-white;
@@ -20,7 +20,7 @@
 
 .project-name-div {
     display: flex;
-    padding: 24px 
+    padding: 24px
 }
 
 .project-description-div {
