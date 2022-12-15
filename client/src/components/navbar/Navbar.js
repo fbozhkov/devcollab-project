@@ -17,7 +17,6 @@ const Navbar = () => {
 
     useEffect(() => {
         const data = window.localStorage.getItem('uli')
-        console.log(`data: ${data}`)
         setUser(data)
         validateUser(data)
     }, [])
@@ -30,10 +29,11 @@ const Navbar = () => {
                 })
                 .catch((error) => {
                     window.localStorage.removeItem('uli');
+                    setTimeout(() => {
+                        window.location.reload(false);
+                    }, 300)
                 })
-            setTimeout(() => {
-                window.location.reload(false);
-            }, 300)
+            
         }
     }
 

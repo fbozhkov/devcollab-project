@@ -9,6 +9,7 @@ import About from './components/about/About';
 import Profile from './components/profile/Profile';
 import Projects from './components/projects/Projects';
 import CreateProject from './components/create-project/CreateProject';
+import ProjectPage from './components/project-page/ProjectPage';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path='/profile' element={<Profile />} />
           <Route path='/projects' element={<Projects />} />
           <Route path='/create-project' element={<CreateProject />} />
+          <Route path='/project/:projectId' element={<ProjectPage />} />
         </Routes>
         </StyledEngineProvider>
     </UserContext.Provider>

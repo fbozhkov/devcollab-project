@@ -127,6 +127,10 @@
     width: 480px;
     height: 50px;
 
+    &:hover{
+        background-color: $projects-button-hover;
+    }
+
     @media(max-width: 900px) {
         font-size: 15px;
         line-height: 16px;
@@ -223,6 +227,10 @@
     border-radius: 88px;
     width: 480px;
     height: 50px;
+
+    &:hover{
+        background-color: $create-projects-button-hover;
+    }
 
     @media (max-width:900px) {
         font-size: 15px;
