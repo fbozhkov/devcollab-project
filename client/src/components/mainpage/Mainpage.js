@@ -1,7 +1,7 @@
 import { React, useEffect , useState, useContext } from 'react'
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
-import { Button, Typography, StyledEngineProvider } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import axios from 'axios'
 import styles from './mainpage.module.scss';
 import Projects from '../projects/Projects';
@@ -13,7 +13,6 @@ const Mainpage = () => {
     const baseUrl = process.env.REACT_APP_API;
 
     return(
-        <StyledEngineProvider injectFirst={true}>
         <div className={styles['main-page']}>
             
             <div className={styles['wrapper']}> 
@@ -55,7 +54,6 @@ const Mainpage = () => {
                 
             </div>
         </div>
-        </StyledEngineProvider>
     )
 }
 
