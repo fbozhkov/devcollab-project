@@ -1,0 +1,32 @@
+@import '../../shared/colors.scss';
+
+.wrapper {
+    background-color: $main-background-color;
+    height: 200vh;
+}
+
+.project {
+    max-width: 75vw;
+    margin: 0 auto;
+}
+
+.project-details-div {
+    width: 100%;
+    height: 600px;
+    background-color: $plain-white;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    border-radius: 3px;
+}
+
+.project-name-div {
+    display: flex;
+    padding: 24px
+}
+
+.project-description-div {
+    padding: 16px 24px 24px 24px;
+}
+
+.project-tags-div {
+    padding: 16px 24px 24px 24px;
+}

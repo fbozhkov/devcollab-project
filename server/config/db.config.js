@@ -55,12 +55,14 @@ const sequelize = new Sequelize(dbUrl(), {
   }
 });
 console.log(`NODE_ENV = ${process.env.NODE_ENV}`)
+
 try {
   await sequelize.authenticate();
   console.log('Connection has been established successfully.');
 } catch (error) {
   console.error('Unable to connect to the database:', error);
 }
+
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 

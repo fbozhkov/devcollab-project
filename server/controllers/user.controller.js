@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import UserService from "../services/user.service.js";
 import User from "../models/user.model.js";
 
-const userController = express.Router()
+const userController = express.Router();
 
 userController.post('/sign-up', async (req, res) => {
     console.log(req.body);
