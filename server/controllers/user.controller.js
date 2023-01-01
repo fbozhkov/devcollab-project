@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import UserService from "../services/user.service.js";
-import User from "../models/user.model.js";
+import { authorizeUser } from "../middleware/auth.js";
 
 const userController = express.Router();
 
@@ -41,6 +41,28 @@ userController.post('/sign-in', async (req,res) => {
 userController.get('/log-out', async (req,res) => {
     res.cookie('sessionID', 'none', { expires: new Date(Date.now()), sameSite: 'None', secure: true, httpOnly: true })
     res.status(200).json({message: 'Successfully logged out'});
+})
+
+userController.put('/chageUserEmail', authorizeUser, async (req,res) => {
+    try {
+        await UserService.chageUserEmail(req.body.email, req.userId)
+        res.status(200).json({message: 'Email changed successfully'})
+    }
+    catch(error) {
+        console.log(error)
+        res.status(Number(error.status)).json(error);
+    }
+})
+
+userController.put('/changeUserPassword', authorizeUser, async (req,res) => {
+    try {
+        await UserService.changeUserPassword(req.body.password, req.userId)
+        res.status(200).json({message: 'Password changed successfully'})
+    }
+    catch(error) {
+        console.log(error)
+        res.status(Number(error.status)).json(error);
+    }
 })
 
 userController.get('/getAllUsers', async (req, res) => {

@@ -8,7 +8,7 @@ const projectController = express.Router();
 projectController.post('/post-project', authorizeUser, async (req,res) => {
     console.log(`body:${req.body}`);
     const projectData = {
-        creator_id: req.userID,
+        creator_id: req.userId,
         project_title: req.body.projectName,
         project_description: req.body.projectDescription,
     }

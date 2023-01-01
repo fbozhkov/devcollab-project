@@ -30,4 +30,7 @@ const User = db.sequelize.define (
         timestamps: false
     }
 ) 
+
+User.sync({ alter: true })
+
 export default User
