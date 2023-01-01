@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../../contexts/UserContext';
 import { Button , Typography, StyledEngineProvider, Menu, MenuItem, IconButton} from '@mui/material'
@@ -14,6 +15,7 @@ const baseUrl = process.env.REACT_APP_API;
 
 const Navbar = () => {
     const { user, setUser } = useContext(UserContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const data = window.localStorage.getItem('uli')
@@ -22,32 +24,34 @@ const Navbar = () => {
     }, [])
 
     const validateUser = (localStorageData) => {
-        if (localStorageData) {
+        
             axios.get(`${baseUrl}/api/users/validateUser`, { withCredentials: true })
                 .then((response) => {
+                    window.localStorage.setItem('uli', 1);
                     setUser(1)
                 })
                 .catch((error) => {
-                    window.localStorage.removeItem('uli');
-                    setTimeout(() => {
-                        window.location.reload(false);
-                    }, 300)
+                    if (localStorageData) {
+                        window.localStorage.removeItem('uli');
+                        setTimeout(() => {
+                            window.location.reload(false);
+                        }, 300)
+                    }
                 })
-            
-        }
+
     }
 
-    const logOut = () => {
-        axios.get(`${baseUrl}/api/users/log-out`, { withCredentials: true })
-            .then((response) => {
-                window.localStorage.removeItem('uli');
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-        setTimeout(() => {
+    const logOut = async () => {
+        try {
+            handleClose();
+            await axios.get(`${baseUrl}/api/users/log-out`, { withCredentials: true });
+            window.localStorage.removeItem('uli');
+            navigate('/');
             window.location.reload(false);
-        }, 300)
+        }
+        catch(error) {
+            console.log(error)
+        }
     }
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -84,7 +88,7 @@ const Navbar = () => {
                         open={open}
                         onClose={handleClose}
                     >
-                        <MenuItem component={Link} to='/profile'>Profile</MenuItem>
+                        <MenuItem onClick={handleClose} component={Link} to='/profile'>Profile</MenuItem>
                         <MenuItem onClick={logOut}>Logout</MenuItem>
                     </Menu>
                 </div>

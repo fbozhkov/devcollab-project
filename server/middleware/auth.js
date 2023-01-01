@@ -3,10 +3,10 @@ import UserService from "../services/user.service.js";
 export const authorizeUser = async (req, res, next) => {
     const session = req.headers.cookie?.split(';').find(cookie => cookie.includes('sessionID'));
     if(session) {
-        const sessionID = session.split("=")[1];
-        req.sessionID = sessionID;
-        const user = await UserService.getUserData(sessionID)
-        req.userID = user.id;
+        const sessionId = session.split("=")[1];
+        req.sessionId = sessionId;
+        const user = await UserService.getUserData(sessionId)
+        req.userId = user.id;
         next();
     }
     else {

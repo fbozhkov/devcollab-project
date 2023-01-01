@@ -1,0 +1,38 @@
+@import '../../shared/colors.scss';
+
+.profile-page {
+    background-color: $main-background-color;
+}
+
+.profile-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 48px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.profile-heading-div {
+    margin-bottom: 16px;
+}
+
+.profile-heading-text {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.profile-cards {
+    display: flex;
+    justify-content: space-evenly;
+    padding-bottom: 32px;
+}
+
+.email-paper {
+    width: 400px;
+    height: 600px;
+}
+
+.password-paper {
+    width: 400px;
+    height: 600px;
+}

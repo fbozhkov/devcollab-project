@@ -1,31 +1,41 @@
 import React, {useState, useEffect} from "react";
-import { Typography } from "@mui/material";
+import { Typography, Paper, TextField, Button } from "@mui/material";
+import styles from './profile.module.scss'
 import axios from "axios";
+import ChangeEmail from "./ChangeEmail";
+import ChangePassword from "./ChanagePassword";
 
 const baseUrl = process.env.REACT_APP_API;
 
 const Profile = () => {
-    const [username, setUsername] = useState(null)
+    const [userName, setUserName] = useState(null)
 
     useEffect(() => {
         getUserData()
     }, [])
 
-    
     const getUserData = () => {
         axios.get(`${baseUrl}/api/users/getUserData`, { withCredentials: true })
             .then((response) => {
-                setUsername(response.data.username)
+                setUserName(response.data.username)
             })
             .catch((error) => {
                 window.localStorage.removeItem('uli');
             })
     }
-    
 
-    return(
-        <div>
-            <Typography variant="h2">Hello {username}!</Typography>
+    return (
+        <div className={styles['profile-page']}>
+            <div className={styles['profile-content']}>
+                <div className={styles['profile-heading-div']}>
+                    <Typography className={styles['profile-heading-text']}> {userName}'s Profile</Typography>
+                </div>
+                <div className={styles['profile-cards']}>
+                    <ChangeEmail />
+                    <ChangePassword />
+                </div>
+                    
+            </div>
         </div>
     )
 }

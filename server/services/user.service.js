@@ -89,37 +89,65 @@ export default class UserService {
                 session_id: sessionID,
                 session_expiration_date: expirationDate
             }
-            const newSession = await Sessions.create(session)
-            return newSession
+            const newSession = await Sessions.create(session);
+            return newSession;
         }
         else if (passwordMatch === false){
-            throw new FormError('401', 0, 'Wrong password!', 'password')
+            throw new FormError('401', 0, 'Wrong password!', 'password');
         }
         else {
-            throw new Error('500', 0, 'Something went wrong :(')
+            throw new Error('500', 0, 'Something went wrong :(');
         }
     }
 
-    static async validateUserSession(sessionID) {
+    static async chageUserEmail(newEmail, userId) {
+        const user = await User.findOne({
+            attributes: ['id', 'email'],
+            where: {
+                id: userId
+            }
+        })
+        if (newEmail === user.email) {
+            throw new Error('409', 0, 'Please enter a new email!');
+        }
+        await user.update({ email: newEmail, date_last_updated_at: new Date()});
+    }
+
+    static async changeUserPassword(newPassword, userId) {
+        const user = await User.findOne({
+            attributes: ['id', 'password'],
+            where: {
+                id: userId
+            }
+        })
+        const passwordMatch = await bcrypt.compare(newPassword, user.password);
+        if (passwordMatch) {
+            throw new Error('409', 0, 'Please enter a new password!');
+        }
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await user.update({ password: hashedPassword, date_last_updated_at: new Date()});
+    }
+
+    static async validateUserSession(sessionId) {
         const userSession = await Sessions.findOne({
             attributes: ['user_id', 'session_id', 'session_creation_date', 'session_expiration_date'],
             where: {
-                session_id: sessionID
+                session_id: sessionId
             }
         })
         if (userSession) {
-            return userSession.session_id
+            return userSession.session_id;
         }
         else {
-            throw new Error(401, 0, 'Invalid sessionID')
+            throw new Error(401, 0, 'Invalid sessionID');
         }
     }
 
-    static async getUserData(sessionID) {
+    static async getUserData(sessionId) {
         const userSession = await Sessions.findOne({
             attributes: ['user_id', 'session_id', 'session_creation_date', 'session_expiration_date'],
             where: {
-                session_id: sessionID
+                session_id: sessionId
             }
         })
         if (userSession) {
@@ -132,7 +160,7 @@ export default class UserService {
         return user;
         }
         else {
-            throw new Error(401, 0, 'Invalid sessionID')
+            throw new Error(401, 0, 'Invalid sessionID');
         }
     }
 
