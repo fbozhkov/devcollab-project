@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../../contexts/UserContext';
-import { Button , Typography, StyledEngineProvider, Menu, MenuItem, IconButton} from '@mui/material'
+import { Button , Menu, MenuItem, IconButton} from '@mui/material'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from 'react-router-dom';
 import styles from './navbar.module.scss'
@@ -88,7 +88,7 @@ const Navbar = () => {
                         open={open}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={handleClose} component={Link} to='/profile'>Profile</MenuItem>
+                        <MenuItem onClick={handleClose} component={Link} to='/my-profile'>My Profile</MenuItem>
                         <MenuItem onClick={logOut}>Logout</MenuItem>
                     </Menu>
                 </div>

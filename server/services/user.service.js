@@ -1,6 +1,10 @@
 import User from '../models/user.model.js'
 import Sessions from '../models/sessions.model.js';
 import bcrypt from "bcrypt";
+import axios from "axios";
+import cloudinary from "../config/cloudinary.config.js";
+import * as streamifier from 'streamifier';
+import avatarUrl from '../config/avatarGenerator.config.js';
 import { v4 as uuidv4 } from 'uuid';
 import {Error, FormError }from '../error/error.js';
 
@@ -30,7 +34,32 @@ export default class UserService {
             console.log(`userName: ${userName}`)
             throw new FormError('409', 0, 'Username already taken! Please choose a different one!', 'username')
         }
-        console.log('after error')
+        
+        const avatarResponse = await axios.get(avatarUrl(userData.username), { responseType: 'arraybuffer' })
+        
+        let uploadFromBuffer = (avatarResponse) => {
+            return new Promise((resolve, reject) => {
+                let cld_upload_stream = cloudinary.v2.uploader.upload_stream(
+                    {
+                        folder: 'test'
+                    },
+                    (error, result) => {
+
+                        if (result) {
+                            resolve(result);
+                        } else {
+                            reject(error);
+                        }
+                    }
+                );
+
+                streamifier.createReadStream(avatarResponse.data).pipe(cld_upload_stream)
+            });
+        }
+        
+        let result = await uploadFromBuffer(avatarResponse)
+        userData['avatar_url'] = result.secure_url;
+
         const newUser = User.create(userData);
         return newUser;
     }
@@ -130,13 +159,13 @@ export default class UserService {
 
     static async validateUserSession(sessionId) {
         const userSession = await Sessions.findOne({
-            attributes: ['user_id', 'session_id', 'session_creation_date', 'session_expiration_date'],
+            attributes: ['user_id', 'session_id'],
             where: {
                 session_id: sessionId
             }
         })
         if (userSession) {
-            return userSession.session_id;
+            return userSession;
         }
         else {
             throw new Error(401, 0, 'Invalid sessionID');
@@ -162,6 +191,22 @@ export default class UserService {
         else {
             throw new Error(401, 0, 'Invalid sessionID');
         }
+    }
+
+    static async getUserAvatar(userId) {
+        const user = await User.findOne({
+            attributes: ['username', 'avatar_url'],
+            where: {
+                id: userId
+            },
+        })
+        if (user.avatar_url) {
+            return user;
+        }
+        else {
+            throw new Error (404, 0, 'Avatar url could not be found')
+        }
+    
     }
 
 }

@@ -16,6 +16,9 @@ const User = db.sequelize.define (
             type: Sequelize.DataTypes.STRING,
             allowNull: false
         },
+        avatar_url: {
+            type: Sequelize.DataTypes.STRING
+        },
         date_created_at: {
             type: Sequelize.DataTypes.DATE,
             allowNull: false,
