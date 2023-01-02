@@ -23,14 +23,6 @@ const Projects = () => {
             })
     }
     
-    /* if (projects) {
-        Object.values(projects).map((project) => {
-            console.log(project)
-        })
-    } */
-
-    
-
     return (
         <div>
             <div className={styles['page-wrapper']}>

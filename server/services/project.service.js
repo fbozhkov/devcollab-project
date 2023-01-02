@@ -4,8 +4,6 @@ export default class ProjectService {
 
     static async postProject(projectData, projectTags) {
         const newProject = await Projects.create(projectData);
-        /* console.log('newProject:')
-        console.log(newProject); */
         for (const tag of projectTags) {
             const tagData = {
                 project_id: newProject.dataValues.project_id,
