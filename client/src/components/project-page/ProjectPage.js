@@ -16,14 +16,6 @@ const ProjectPage = () => {
         getProjectInfo()
     }, [])
 
-    /* let tags = [];
-    if (project.length) {
-        console.log('project')
-        console.log(project)
-        for (const tag of project?.tags) {
-            tags.push(Object.values(tag)[0]);
-        }
-    } */
     if(isLoaded){
         console.log(Object.values(project.tags))
 
