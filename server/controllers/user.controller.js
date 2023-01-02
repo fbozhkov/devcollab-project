@@ -1,5 +1,8 @@
 import express from "express";
 import bcrypt from "bcrypt";
+import axios from 'axios';
+import cloudinary from "../config/cloudinary.config.js";
+import * as streamifier from 'streamifier';
 import UserService from "../services/user.service.js";
 import { authorizeUser } from "../middleware/auth.js";
 
@@ -22,6 +25,27 @@ userController.post('/sign-up', async (req, res) => {
         console.log('catch block');
         console.log(e);
         res.status(Number(e.status)).json(e);
+    }
+})
+
+userController.get('/test', async (req,res) => {
+    try{
+        const avatarResponse = await axios.get('https://ui-avatars.com/api/?background=random', { responseType: 'arraybuffer' })
+        res.set('Content-Type', avatarResponse.headers['content-type']);
+        res.status(200).send(avatarResponse.data);
+        let cld_upload_stream = cloudinary.v2.uploader.upload_stream(
+            {
+                folder: 'test'
+            },
+            (error, result) => {
+                console.log(error,result);
+                console.log(result.secure_url)
+            }
+        );
+        streamifier.createReadStream(avatarResponse.data).pipe(cld_upload_stream) 
+    }
+    catch(error) {
+        console.log(error)
     }
 })
 
@@ -110,6 +134,17 @@ userController.get('/getUserData', async (req,res) => {
     }
     else {
         res.status(404).json({ 'message': 'No user session found' })
+    }
+})
+
+userController.get('/getUserAvatar/:id', async (req,res) => {
+    try {
+        const avatar = await UserService.getUserAvatar(req.params['id'])
+        res.status(200).json(avatar);
+    }
+    catch(error){
+        console.log(error)
+        res.status(Number(error.status)).json(error);
     }
 })
 
