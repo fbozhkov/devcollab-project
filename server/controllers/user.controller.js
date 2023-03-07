@@ -17,7 +17,10 @@ userController.post('/sign-up', async (req, res) => {
         password: hashedPassword
     }
     try {
-        await UserService.userSignUp(userData);
+        const user = await UserService.userSignUp(userData);
+        console.log('user')
+        console.log(user.dataValues.id)
+        await UserService.initAdditionalInfo(user.dataValues.id);
         userData["success"] = 1;
         res.status(200).json(userData);
     }
@@ -59,6 +62,15 @@ userController.post('/sign-in', async (req,res) => {
     catch(e) {
         console.log(e)
         res.status(Number(e.status)).json(e);
+    }
+})
+
+userController.put('/additionalInfo', authorizeUser, async (req,res) => {
+    try {
+        await UserService.addAdditionalInfo(req.body, req.userId)
+    }
+    catch(error){
+        console.log(error)
     }
 })
 
@@ -107,6 +119,8 @@ userController.get('/validateUser', async (req, res) => {
         console.log(`sessionID: ${sessionID}`)
         try {
             const user = await UserService.validateUserSession(sessionID)
+            user.dataValues['success'] = 1;
+            console.log(user)
             res.status(200).json(user);
         }
         catch(error){
@@ -115,7 +129,7 @@ userController.get('/validateUser', async (req, res) => {
         }
     }
     else {
-        res.status(404).json({'message' : 'No user session found'})
+        res.status(404).json({'message' : 'No user session found', 'success': 0})
     }
 })
 
@@ -143,6 +157,17 @@ userController.get('/getUserAvatar/:id', async (req,res) => {
         res.status(200).json(avatar);
     }
     catch(error){
+        console.log(error)
+        res.status(Number(error.status)).json(error);
+    }
+})
+
+userController.get('/getAdditionalInfo/:id', async (req, res) => {
+    try {
+        const userInfo = await UserService.getAdditionalInfo(req.params['id'])
+        res.status(200).json(userInfo);
+    }
+    catch (error) {
         console.log(error)
         res.status(Number(error.status)).json(error);
     }

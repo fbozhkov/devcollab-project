@@ -1,5 +1,6 @@
 import User from '../models/user.model.js'
 import Sessions from '../models/sessions.model.js';
+import UserInfo from '../models/user.info.model.js';
 import bcrypt from "bcrypt";
 import axios from "axios";
 import cloudinary from "../config/cloudinary.config.js";
@@ -207,6 +208,37 @@ export default class UserService {
             throw new Error (404, 0, 'Avatar url could not be found')
         }
     
+    }
+
+    static async initAdditionalInfo(userId) {
+        const data = {id: userId}
+        console.log(data)
+        const additionalInfo = UserInfo.create(data)
+    }
+
+    static async addAdditionalInfo(payload, userId) {
+        const data = {id: userId, ...payload}
+        const user = await UserInfo.findOne({
+            where: {
+                id: userId
+            }
+        })
+        await user.update(data)
+    }
+
+    static async getAdditionalInfo(userId) {
+        const user = await UserInfo.findOne({
+            attributes: ['bio', 'github', 'linkedIn', 'twitter'],
+            where: {
+                id: userId
+            }
+        })
+        if (user) {
+            return user;
+        }
+        else {
+            throw new Error (404, 0, 'Additional userInfo could not be found!')
+        }
     }
 
 }

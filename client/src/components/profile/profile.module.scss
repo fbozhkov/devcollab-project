@@ -2,18 +2,32 @@
 
 .profile-page {
     background-color: $main-background-color;
+    min-height: 75vh;
+}
+
+.card-div {
+    padding-top: 48px;
 }
 
 .profile-content {
-    max-width: 1200px;
+    max-width: 900px;
+    min-height: 500px;
     margin: 0 auto;
-    padding-top: 48px;
+    padding-top: 16px;
     padding-left: 16px;
     padding-right: 16px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 .profile-heading-div {
     margin-bottom: 16px;
+    display: flex;
+}
+
+.avatar-and-username {
+    display: flex;
+    flex-direction: column;
+    max-width: 200px;
 }
 
 .avatar {
@@ -26,6 +40,36 @@
     font-weight: 600;
 }
 
+.edit-profile-div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-profile-button-div {
+    height: fit-content;
+    align-self: flex-end;
+}
+
+.edit-profile-info-div {
+    display: flex;
+    flex-direction: column;
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+.edit-profile-info-heading-div {
+    align-self: flex-start;
+}
+
+.edit-profile-info-heading-text {
+    font-weight: 600;
+}
+
+.edit-profile-info-bio-text {
+    text-align: left;
+}
+
 .profile-cards {
     display: flex;
     justify-content: space-evenly;
@@ -34,10 +78,10 @@
 
 .email-paper {
     width: 400px;
-    height: 600px;
+    height: 400px;
 }
 
 .password-paper {
     width: 400px;
-    height: 600px;
+    height: 400px;
 }

@@ -8,7 +8,7 @@ const baseUrl = process.env.REACT_APP_API;
 const ChangeEmail = () => {
     const [userEmail, setUserEmail] = useState('')
     const [emailError, setEmailError] = useState({ state: false, message: '' });
-    const [emailChangeSuccess, setEmailChnageSuccess] = useState(false)
+    const [emailChangeSuccess, setEmailChanageSuccess] = useState(false)
 
     const emailRegEx = (/\S+@\S+\.\S+/);
 
@@ -21,7 +21,7 @@ const ChangeEmail = () => {
     }
 
     const closeEmailChangeSuccess = () => {
-        setEmailChnageSuccess(false)
+        setEmailChanageSuccess(false)
     }
 
     const getUserData = () => {
@@ -53,7 +53,7 @@ const ChangeEmail = () => {
             },  
             { withCredentials: true })
             .then((response) => {
-                setEmailChnageSuccess(true);
+                setEmailChanageSuccess(true);
             })
             .catch((error) => {
                 setEmailError({ state: true, message: error.response.data.message});
