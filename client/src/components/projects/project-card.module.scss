@@ -30,3 +30,12 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 }
+
+.project-tags-div {
+    display: flex;
+    justify-content: center;
+}
+
+.tag-chip {
+    margin-right: 8px;
+}

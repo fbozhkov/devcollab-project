@@ -51,6 +51,7 @@ const SignInDialog = (props) => {
             props.setOpen(false);
             setUser(userIsLogged);
             setOpen(false);
+            window.location.reload(false);
         })
         .catch((error) => {
             console.log(error.response.data)
