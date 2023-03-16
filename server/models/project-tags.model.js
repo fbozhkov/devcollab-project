@@ -1,5 +1,6 @@
 import db from "../config/db.config.js";
 import Projects from './projects.model.js'
+import Tags from './tags.model.js'
 import { Sequelize } from "sequelize";
 
 const ProjectTags = db.sequelize.define(
@@ -22,17 +23,23 @@ const ProjectTags = db.sequelize.define(
 
         project_tag_id: {
             type: Sequelize.DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: Tags,
+                key: 'id'
+            }
         },
 
-        tag: {
-            type: Sequelize.DataTypes.STRING,
-            allowNull: false
-        }
     }, {
     timestamps: false
 });
-Projects.hasMany(ProjectTags, {foreignKey: 'project_id', as: 'tags'});
-ProjectTags.belongsTo(Projects, {foreignKey: 'project_id', as: 'tags'});
+/* Projects.hasMany(ProjectTags, {foreignKey: 'project_id', as: 'tags'});
+ProjectTags.belongsTo(Projects, {foreignKey: 'project_id', as: 'tags'}); */
+Tags.belongsToMany(Projects, { through: ProjectTags, foreignKey: 'project_tag_id', 
+otherKey:'project_id', as: 'projects' });
+Projects.belongsToMany(Tags, { through: ProjectTags, foreignKey: 'project_id',
+otherKey:'project_tag_id', as: 'tags' });
+
+ProjectTags.sync()
 
 export default ProjectTags

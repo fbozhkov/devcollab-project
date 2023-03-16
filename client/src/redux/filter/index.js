@@ -1,0 +1,1 @@
+export { FILTERSELECTED } from './actionTypes';

@@ -17,7 +17,7 @@ const CreateProject = () => {
     useEffect(() => {   
         validateUser();
     }, [])
-console.log(userLoggedIn)
+
     const validateUser = () => {
         axios.get(`${baseUrl}/api/users/validateUser`, { withCredentials: true })
             .then((response) => {

@@ -48,8 +48,8 @@ const ProjectPage = () => {
                     <div className={styles['project-tags-div']}>
                         {isLoaded && project && project.tags.map((tagObj, index) => {
                             console.log('tag', tagObj)
-                            const tag = Object.values(tagObj)
-                            console.log('index', index);
+                            const tag = Object.values(tagObj.tag)
+                            console.log('tagObj', tagObj);
                             return (
                                 <Chip key={index} label={tag} />
                             )

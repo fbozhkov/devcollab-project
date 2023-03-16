@@ -1,16 +1,32 @@
 import Projects from "../models/projects.model.js"
 import ProjectTags from "../models/project-tags.model.js";
+import Tags from "../models/tags.model.js";
 export default class ProjectService {
 
     static async postProject(projectData, projectTags) {
         const newProject = await Projects.create(projectData);
         for (const tag of projectTags) {
-            const tagData = {
-                project_id: newProject.dataValues.project_id,
-                project_tag_id: projectTags.indexOf(tag),
-                tag: tag
+            const tagDb = await Tags.findOne({
+                attributes: ['id', 'tag'],
+                where: {
+                    tag: tag
+                }
+            })
+            if (tagDb) {
+                const tagData = {
+                    project_id: newProject.dataValues.project_id,
+                    project_tag_id: tagDb.dataValues.id,
+                }
+                const projectTag = await ProjectTags.create(tagData);
             }
-            const newTag = await ProjectTags.create(tagData);
+            else {
+                const newTag = await Tags.create({tag: tag});
+                const tagData = {
+                    project_id: newProject.dataValues.project_id,
+                    project_tag_id: newTag.dataValues.id,
+                }
+                const projectTag = await ProjectTags.create(tagData);
+            }
         }
     }
 
@@ -18,14 +34,13 @@ export default class ProjectService {
         const projects = Projects.findAll({
             attributes: ['project_id','creator_id','project_title','project_description','creation_date','last_updated_date'],
             include: [{
-                model: ProjectTags,
+                model: Tags,
                 as: 'tags',
-                attributes: [ 'tag'],
-                required: false
+                attributes: ['tag']
             }]
         })
         .catch(error => {
-            throw new Error(error.message);
+            throw new Error(error);
         })
         return projects;
     }
@@ -34,10 +49,9 @@ export default class ProjectService {
         const project = Projects.findOne({
             attributes: ['project_id', 'creator_id', 'project_title', 'project_description', 'creation_date', 'last_updated_date'],
             include: [{
-                model: ProjectTags,
+                model: Tags,
                 as: 'tags',
-                attributes: ['tag'],
-                required: false
+                attributes: ['tag']
             }],
             where: {
                 project_id: id
