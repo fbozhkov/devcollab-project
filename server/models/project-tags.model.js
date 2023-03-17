@@ -33,8 +33,6 @@ const ProjectTags = db.sequelize.define(
     }, {
     timestamps: false
 });
-/* Projects.hasMany(ProjectTags, {foreignKey: 'project_id', as: 'tags'});
-ProjectTags.belongsTo(Projects, {foreignKey: 'project_id', as: 'tags'}); */
 Tags.belongsToMany(Projects, { through: ProjectTags, foreignKey: 'project_tag_id', 
 otherKey:'project_id', as: 'projects' });
 Projects.belongsToMany(Tags, { through: ProjectTags, foreignKey: 'project_id',

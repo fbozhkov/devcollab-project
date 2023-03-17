@@ -47,4 +47,6 @@ const Projects = db.sequelize.define (
     }
 )
 
+Projects.sync()
+
 export default Projects

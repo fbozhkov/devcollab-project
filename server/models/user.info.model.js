@@ -39,6 +39,6 @@ const UserInfo = db.sequelize.define (
     }
 )
 
-UserInfo.sync({ alter: true })
+UserInfo.sync()
 
 export default UserInfo

@@ -7,7 +7,6 @@ const Sessions = db.sequelize.define (
     {
         user_id: {
             type: Sequelize.DataTypes.INTEGER,
-            primaryKey: true,
             allowNull: false,
             references: {
                 model: User,
@@ -16,7 +15,8 @@ const Sessions = db.sequelize.define (
         },
         session_id: {
             type: Sequelize.DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            primaryKey: true
         },
         session_creation_date: {
             type: Sequelize.DataTypes.DATE,
@@ -31,4 +31,7 @@ const Sessions = db.sequelize.define (
     timestamps: false
     }
 )
+
+Sessions.sync()
+
 export default Sessions

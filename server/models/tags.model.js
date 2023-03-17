@@ -19,6 +19,6 @@ const Tags = db.sequelize.define(
     timestamps: false
 });
 
-/* Tags.sync() */
+Tags.sync()
 
 export default Tags
