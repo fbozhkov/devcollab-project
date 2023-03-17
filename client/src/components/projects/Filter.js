@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Chip } from "@mui/material";
+import { Chip, Button } from "@mui/material";
 import styles from './filter.module.scss'
 import { useDispatch } from "react-redux";
 import { filterSelected } from "../../redux/filter/actions";
@@ -9,9 +9,13 @@ const Filter = () => {
     const options = ['javascript','python','php','java','c++','react','node']
     const dispatch = useDispatch();
 
+    const clearFilter = () => {
+        setSelected('all');
+        dispatch(filterSelected('all'));
+    }
+
     return (
-        <div>
-        <h1>Filter</h1>
+        <div className={styles['filters']}>
             <div className={styles['chips']}>
                 {options.map((option, index) => {
                     return (
@@ -33,6 +37,9 @@ const Filter = () => {
                         </div>
                     );
                 })}
+            </div>
+            <div className={styles['button-div']}>
+                <Button className={styles['button']} variant="text" onClick={clearFilter}>Clear</Button>
             </div>
         </div>
     );

@@ -1,0 +1,22 @@
+.search-container {
+    width: auto;
+    border: 3px solid #fff;
+    display: flex;
+    margin: 1rem;
+    outline: none;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 0 25px -3px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+    align-items: center;
+    font-weight: 500;
+    border-radius: 50px;
+}
+
+.search-icon {
+    margin-left: 0.5rem;
+}
+
+.text-field {
+    padding: 4px 4px 4px 12px;
+}

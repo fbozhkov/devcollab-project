@@ -1,3 +1,8 @@
+.filters {
+    display: flex;
+    justify-content: space-between;
+}
+
 .chips {
     display: flex;
     padding: 1rem;
@@ -5,4 +10,15 @@
 
 .chip {
     margin-right: 0.5rem;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.button-div {
+    align-self: center;
+    padding-right: 16px;
+}
+
+.button {
+    color: black;
 }

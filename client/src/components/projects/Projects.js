@@ -4,6 +4,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import ProjectCard from "./ProjectCard";
 import Filter from "./Filter";
+import SearchBar from "./SearchBar";
 import styles from './projects.module.scss'
 
 const baseUrl = process.env.REACT_APP_API;
@@ -18,8 +19,11 @@ const Projects = () => {
 
     useEffect(() => {
         getAllProjects();
+    }, [])
+
+    useEffect(() => {
         filterProjects();
-    },[filter])
+    }, [filter, projects])
 
     const getAllProjects = () => {
         axios.get(`${baseUrl}/api/projects/get-all-projects`)
@@ -41,7 +45,7 @@ const Projects = () => {
             console.log(projects)
             const filtered = projects.filter((project) => {
                 return project.tags.some((tag) => {
-                    return tag.tag === filter;
+                    return tag.tag.toLowerCase() === filter;
                 })
             })
             console.log(filtered)
@@ -59,8 +63,13 @@ const Projects = () => {
                     <div>
                         <Typography variant="h2">Projects</Typography>
                     </div>
-                    <div>
-                        <Filter />
+                    <div className={styles['filter-sort']}>
+                        <div>
+                            <SearchBar />
+                        </div>
+                        <div>
+                            <Filter />
+                        </div>
                     </div>
                     {loading ?
                         <div className={styles['loading']}>
@@ -69,7 +78,7 @@ const Projects = () => {
                         : 
                         noResults ?
                             <div className={styles['no-results']}>
-                                <Typography variant="h4">No results found</Typography>
+                                <Typography variant="h4">No results found for '{filter}'</Typography>
                             </div>
                             :
                             <div>
