@@ -23,7 +23,7 @@ const SignUpDialog = (props) => {
 
     const emailRegEx = (/\S+@\S+\.\S+/);
     const passwordRegEx = (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/);
-    const userNameRegEx = (/\w{4,30}$/);
+    const userNameRegEx = (/^[\w.]{4,30}$/);
 
     const handleClose = () => {
         props.setOpen(false);
