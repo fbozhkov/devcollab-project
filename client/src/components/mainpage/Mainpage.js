@@ -1,17 +1,10 @@
-import { React, useEffect , useState, useContext } from 'react'
+import { React } from 'react'
 import { Link } from 'react-router-dom';
-import { UserContext } from '../../contexts/UserContext';
 import { Button, Typography } from '@mui/material';
-import axios from 'axios'
 import styles from './mainpage.module.scss';
-import Projects from '../projects/Projects';
-import CreateProject from '../create-project/CreateProject';
 
 const Mainpage = () => {
-    const { setUser } = useContext(UserContext);
-
-    const baseUrl = process.env.REACT_APP_API;
-
+    
     return(
         <div className={styles['main-page']}>
             

@@ -1,7 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { UserContext } from '../../contexts/UserContext';
+import { useDispatch ,useSelector } from 'react-redux';
+import { getIsLoggedIn } from '../../redux/auth';
+import { logout } from "../../redux/auth";
 import { Button , Menu, MenuItem, IconButton} from '@mui/material'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from 'react-router-dom';
@@ -11,47 +12,16 @@ import SignInButton from './sign-in-button/SignInButton';
 import SignUpButton from './sign-up-button/SignUpButton';
 import HamburgerMenu from './hamburger-menu/HamburgerMenu';
 
-const baseUrl = process.env.REACT_APP_API;
-
 const Navbar = () => {
-    const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const userIsLogged = useSelector(getIsLoggedIn);
 
-    useEffect(() => {
-        const data = window.localStorage.getItem('uli')
-        setUser(data)
-        validateUser(data)
-    }, [])
-
-    const validateUser = (localStorageData) => {
-        
-            axios.get(`${baseUrl}/api/users/validateUser`, { withCredentials: true })
-                .then((response) => {
-                    window.localStorage.setItem('uli', 1);
-                    setUser(1)
-                })
-                .catch((error) => {
-                    if (localStorageData) {
-                        window.localStorage.removeItem('uli');
-                        setTimeout(() => {
-                            window.location.reload(false);
-                        }, 300)
-                    }
-                })
-
-    }
-
-    const logOut = async () => {
-        try {
-            handleClose();
-            await axios.get(`${baseUrl}/api/users/log-out`, { withCredentials: true });
-            window.localStorage.removeItem('uli');
-            navigate('/');
-            window.location.reload(false);
-        }
-        catch(error) {
-            console.log(error)
-        }
+    const logOut = () => {
+        handleClose();
+        dispatch(logout());
+        navigate('/');
+        window.location.reload(false);
     }
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -77,7 +47,7 @@ const Navbar = () => {
                 <Button className={styles['nav-btn']} component={Link} to="/create-project"> create </Button>
                 <Button className={styles['nav-btn']} component={Link} to="/about"> about </Button>
             </div>
-            {user ? 
+            {userIsLogged ? 
                 <div className={styles['profile']}>
                     <IconButton onClick={handleProfile} >
                         <AccountCircleIcon className={styles['profile-icon']} />

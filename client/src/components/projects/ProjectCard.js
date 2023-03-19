@@ -8,7 +8,6 @@ const baseUrl = process.env.REACT_APP_API;
 
 const ProjectCard = (props) => {
     const [userAvatar, setUserAvatar] = useState({})
-    console.log(props.data)
     useEffect(() => {
         getUserAvatar()
     }, [])

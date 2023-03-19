@@ -32,7 +32,7 @@ userController.post('/sign-up', async (req, res) => {
 })
 
 userController.get('/test', async (req,res) => {
-    try{
+    try {
         const avatarResponse = await axios.get('https://ui-avatars.com/api/?background=random', { responseType: 'arraybuffer' })
         res.set('Content-Type', avatarResponse.headers['content-type']);
         res.status(200).send(avatarResponse.data);
@@ -56,7 +56,7 @@ userController.post('/sign-in', async (req,res) => {
     console.log(req.body)
     try {
         const auth = await UserService.signInUser(req.body.email, req.body.password)
-        res.cookie('sessionID', auth.session_id, { expires: auth.session_expiration_date, sameSite: "none", httpOnly:true})
+        res.cookie('sessionID', auth.session_id, { expires: auth.session_expiration_date, sameSite: 'None', secure: true, httpOnly: true })
         res.status(200).json({'authentication': auth, 'message': 'Authentication succeeded!', 'success': 1})
     }
     catch(e) {
@@ -75,7 +75,7 @@ userController.put('/additionalInfo', authorizeUser, async (req,res) => {
 })
 
 userController.get('/log-out', async (req,res) => {
-    res.cookie('sessionID', 'none', { expires: new Date(Date.now()), sameSite: "none", httpOnly: true })
+    res.cookie('sessionID', 'none', { expires: new Date(Date.now()), sameSite: 'None', secure: true, httpOnly: true })
     res.status(200).json({message: 'Successfully logged out'});
 })
 

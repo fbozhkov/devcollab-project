@@ -1,21 +1,18 @@
-import { React, useState, useEffect ,useContext } from "react";
-import { UserContext } from "../../../contexts/UserContext";
-import axios from "axios";
+import { React, useState} from "react";
 import {
     Button, Box, Dialog, DialogActions, DialogContent, DialogContentText,
-    DialogTitle, TextField, Typography
+    DialogTitle, TextField, Typography, CircularProgress
 } from '@mui/material'
 import styles from './sign-in-dialog.module.scss'
-import { HamburgerContext } from "../../../contexts/HamburgerContext";
-
-const baseUrl = process.env.REACT_APP_API;
+import { loginRequest } from "../../../redux/auth";
+import { useDispatch } from "react-redux";
 
 const SignInDialog = (props) => {
-    const { setUser } = useContext(UserContext);
-    const { setOpen } = useContext(HamburgerContext)
+    const dispatch = useDispatch();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
     const [signUpError, setSignUpError] = useState({errorState: false, errorMessage:''});
     const [signUpEmailError, setSignUpEmailError] = useState({ errorState: false, errorMessage: '' });
     const [signUpPasswordError, setSignUpPasswordError] = useState({ errorState: false, errorMessage: '' });
@@ -25,6 +22,7 @@ const SignInDialog = (props) => {
         setSignUpError({errorState: false, errorMessage:''})
         setSignUpEmailError({ errorState: false, errorMessage: '' })
         setSignUpPasswordError({ errorState: false, errorMessage: '' })
+        setLoading(false);
     }
 
     const handleEmail = (e) => {
@@ -37,23 +35,14 @@ const SignInDialog = (props) => {
 
     const submitForm = (e) => {
         e.preventDefault();
-        axios.post(`${baseUrl}/api/users/sign-in`, {
-            email: email,
-            password: password
-        },
-        {withCredentials: true})
-        .then((response) => {
-            console.log('>>>>>>>setUser 3')
-            
-            const userIsLogged = JSON.stringify(response.data?.success)
-            window.localStorage.setItem('uli', userIsLogged);
-            console.log(userIsLogged)
-            props.setOpen(false);
-            setUser(userIsLogged);
-            setOpen(false);
-            window.location.reload(false);
-        })
+        setLoading(true);
+        const payload = { email, password };
+        dispatch(loginRequest(payload))
+        .then(() => {
+             setLoading(false); 
+        }) 
         .catch((error) => {
+            setLoading(false);
             console.log(error.response.data)
             if (error.response.data.errorOrigin === 'email') {
                 setSignUpEmailError({ errorState: true, errorMessage: error.response.data.message })
@@ -64,7 +53,7 @@ const SignInDialog = (props) => {
             else {
                 setSignUpError({ errorState: true, errorMessage: error.response.data.message})
             }
-        })
+        }) 
     }
 
     return (
@@ -101,9 +90,16 @@ const SignInDialog = (props) => {
                     }
                 </div>
             </DialogContent>
-            <DialogActions>
-                <Button type="submit">Sign In</Button>
-            </DialogActions>
+            {loading ?
+                <div className={styles['loading']}>
+                    <CircularProgress />
+                </div>
+                : 
+                <DialogActions>
+                    <Button type="submit">Sign In</Button>
+                </DialogActions>
+            }
+            
         </Box>
     </Dialog>
     );

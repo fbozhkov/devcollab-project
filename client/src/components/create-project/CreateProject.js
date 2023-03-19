@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import styles from './create-project.module.scss';
 import { Typography, TextField, Stack, Autocomplete, Chip, Box, Button } from "@mui/material";
 import axios from "axios";
+import { baseUrl } from "../../utils/apiBaseUrl"
 import Protected from "../protected/Protected";
 
-const baseUrl = process.env.REACT_APP_API;
 console.warn(`baseUrl: ${baseUrl}`)
 const techStack = ['java', 'javascript', 'react', 'node.js', 'python'];
 const CreateProject = () => {

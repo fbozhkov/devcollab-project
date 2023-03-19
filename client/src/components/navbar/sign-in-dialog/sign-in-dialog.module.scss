@@ -17,3 +17,10 @@
         color: $error-message;
     }
 }
+
+.loading {
+    display: flex;
+    padding-bottom: 16px;
+    justify-content: center;
+    align-items: center;
+}

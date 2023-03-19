@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
-import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
-import { UserContext } from '../../../contexts/UserContext';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getIsLoggedIn } from '../../../redux/auth';
+import { logout } from '../../../redux/auth';
 import { HamburgerContext } from '../../../contexts/HamburgerContext';
 import {
     Button, IconButton, Dialog, DialogContent, Slide
@@ -11,14 +12,13 @@ import SignInButton from "../sign-in-button/SignInButton";
 import SignUpButton from "../sign-up-button/SignUpButton";
 import styles from './hamburger-menu.module.scss';
 
-const baseUrl = process.env.REACT_APP_API;
-
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="left" ref={ref} {...props} />;
 });
 
 const HamburgerMenu = () => {
-    const { user } = useContext(UserContext);
+    const dispatch = useDispatch();
+    const userIsLogged = useSelector(getIsLoggedIn);
 
     const [open, setOpen] = React.useState(false);
 
@@ -43,19 +43,13 @@ const HamburgerMenu = () => {
     }
 
     const profileRoute = () => {
-        let path = `/profile`;
+        let path = `/my-profile`;
         navigate(path);
         setOpen(false);
     }
 
     const logOut = () => {
-        axios.get(`${baseUrl}/api/users/log-out`, { withCredentials: true })
-            .then((response) => {
-                window.localStorage.removeItem('uli');
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        dispatch(logout());
         setTimeout(() => {
             window.location.reload(false);
         }, 300)
@@ -86,7 +80,7 @@ const HamburgerMenu = () => {
                     <Button className={styles['nav-btn']} onClick={projectsRoute}> projects </Button>
                     <Button className={styles['nav-btn']} onClick={createProjectRoute}> create </Button>
                     <Button className={styles['nav-btn']} onClick={aboutRoute}> about </Button>
-                    {user ?
+                    {userIsLogged ?
                         <div className={styles.content}>                            
                             <Button type='button' onClick={profileRoute}> Profile</Button>
                             <Button type='button' onClick={logOut}>Log out</Button>
