@@ -42,13 +42,11 @@ const Projects = () => {
         if (filter === 'all') {
             setFilteredProjects(projects);
         } else {
-            console.log(projects)
             const filtered = projects.filter((project) => {
                 return project.tags.some((tag) => {
                     return tag.tag.toLowerCase() === filter;
                 })
             })
-            console.log(filtered)
             if (filtered.length === 0) {
                 setNoResults(true);
             }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import styles from './create-project.module.scss';
-import { Typography, TextField, Stack, Autocomplete, Chip, Box, Button, CircularProgress } from "@mui/material";
+import { Typography, TextField, Autocomplete, Chip, Box, Button, CircularProgress } from "@mui/material";
 import axios from "axios";
 import { baseUrl } from "../../utils/apiBaseUrl"
 import Protected from "../protected/Protected";
@@ -15,6 +15,7 @@ const CreateProject = () => {
     const [projectName, setProjectName] = useState('')
     const [projectDescription, setProjectDescription] = useState('')
     const [projectTags, setProjectTags] = useState([])
+    const [projectTagsError, setProjectTagsError] = useState(false)
 
     const navigate = useNavigate();
 
@@ -25,12 +26,11 @@ const CreateProject = () => {
     const validateUser = () => {
         axios.get(`${baseUrl}/api/users/validateUser`, { withCredentials: true })
             .then((response) => {
-                console.log(`status:${response.status}`)
                 setUserLoggedIn(response.data.success);
                 setLoading(false);
             })
             .catch((error) => {
-                console.log(`error response:${error.response.data}`)
+                console.log(`error:${error.response.data}`)
                 setUserLoggedIn(false);
                 setLoading(false);
             })
@@ -47,23 +47,36 @@ const CreateProject = () => {
     const handleProjectTags = (event, value) => {
         setProjectTags(value)
     }
+
+    const validateTags = () => {
+        if (projectTags.length === 0) {
+            setProjectTagsError(true);
+            return false;
+        }
+        else {
+            setProjectTagsError(false);
+            return true;
+        }
+    }
     
     const submitProject = async (e) => {
         e.preventDefault();
-        setPostLoading(true);
-        try {
-            const response = await axios.post(`${baseUrl}/api/projects/post-project`, {
-                projectName: projectName,
-                projectDescription: projectDescription,
-                projectTags: projectTags
-            },
-            { withCredentials: true })
-            setPostLoading(false);
-            navigate(`/project/${response.data.project_id}`);
-        }
-        catch(error) {
-            console.log(`error response:${error.response.data}`)
-            setPostLoading(false);
+        if (validateTags()) {
+            setPostLoading(true);
+            try {
+                const response = await axios.post(`${baseUrl}/api/projects/post-project`, {
+                    projectName: projectName,
+                    projectDescription: projectDescription,
+                    projectTags: projectTags
+                },
+                { withCredentials: true })
+                setPostLoading(false);
+                navigate(`/project/${response.data.project_id}`);
+            }
+            catch(error) {
+                console.log(`error response:${error.response.data}`)
+                setPostLoading(false);
+            }
         }
     }
 
@@ -73,8 +86,8 @@ const CreateProject = () => {
                 <Typography variant="h2">Create Project</Typography>
                     {loading ? <div>Loading...</div> :    
                         userLoggedIn ? 
-                            <div className={styles['create-project']}>
-                            <Box component="form" onSubmit={submitProject}>
+                            <div >
+                            <Box className={styles['create-project']} component="form" onSubmit={submitProject}>
                                 <div className={styles['input-fields-div']}>
                                     <div className={styles['project-name-div']}>
                                         <TextField 
@@ -124,6 +137,8 @@ const CreateProject = () => {
                                                 <TextField
                                                     {...params}
                                                     variant="outlined"
+                                                    error={projectTagsError}
+                                                    helperText={projectTagsError ? "Please enter at least one tag!" : ""}
                                                     label="Tags"
                                                     placeholder="Favorites"
                                                 />
