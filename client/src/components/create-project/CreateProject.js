@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import styles from './create-project.module.scss';
-import { Typography, TextField, Stack, Autocomplete, Chip, Box, Button } from "@mui/material";
+import { Typography, TextField, Stack, Autocomplete, Chip, Box, Button, CircularProgress } from "@mui/material";
 import axios from "axios";
 import { baseUrl } from "../../utils/apiBaseUrl"
 import Protected from "../protected/Protected";
@@ -9,10 +10,13 @@ console.warn(`baseUrl: ${baseUrl}`)
 const techStack = ['java', 'javascript', 'react', 'node.js', 'python'];
 const CreateProject = () => {
     const [loading, setLoading] = useState(true);
+    const [postLoading, setPostLoading] = useState(false);
     const [userLoggedIn, setUserLoggedIn] = useState(false);
     const [projectName, setProjectName] = useState('')
     const [projectDescription, setProjectDescription] = useState('')
     const [projectTags, setProjectTags] = useState([])
+
+    const navigate = useNavigate();
 
     useEffect(() => {   
         validateUser();
@@ -44,22 +48,23 @@ const CreateProject = () => {
         setProjectTags(value)
     }
     
-    const submitProject = (e) => {
+    const submitProject = async (e) => {
         e.preventDefault();
-
-        axios.post(`${baseUrl}/api/projects/post-project`, {
-            projectName: projectName,
-            projectDescription: projectDescription,
-            projectTags: projectTags
-        },
-        { withCredentials: true })
-        .then((response) => {
-            console.log(`status:${response.status}`)
-        })
-        .catch((error) => {
+        setPostLoading(true);
+        try {
+            const response = await axios.post(`${baseUrl}/api/projects/post-project`, {
+                projectName: projectName,
+                projectDescription: projectDescription,
+                projectTags: projectTags
+            },
+            { withCredentials: true })
+            setPostLoading(false);
+            navigate(`/project/${response.data.project_id}`);
+        }
+        catch(error) {
             console.log(`error response:${error.response.data}`)
-        })
-
+            setPostLoading(false);
+        }
     }
 
     return (
@@ -117,10 +122,12 @@ const CreateProject = () => {
                                             )}
                                         />
                                     </div>
-                                    <Button 
-                                        type="submit"
-                                        variant="contained"
-                                        >Post Project</Button>
+                                    {postLoading ? <CircularProgress /> 
+                                        : 
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                        >Post Project</Button>}
                                 </div>
                             </Box>
                             </div>

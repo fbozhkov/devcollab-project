@@ -18,6 +18,7 @@ export default class ProjectService {
                     project_tag_id: tagDb.dataValues.id,
                 }
                 const projectTag = await ProjectTags.create(tagData);
+                return newProject;
             }
             else {
                 const newTag = await Tags.create({tag: tag});
@@ -26,6 +27,7 @@ export default class ProjectService {
                     project_tag_id: newTag.dataValues.id,
                 }
                 const projectTag = await ProjectTags.create(tagData);
+                return newProject;
             }
         }
     }
