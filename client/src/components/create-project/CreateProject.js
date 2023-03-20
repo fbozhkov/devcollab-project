@@ -87,6 +87,11 @@ const CreateProject = () => {
                                             onChange={handleProjectName}
                                         />
                                     </div>
+                                    <div className={styles['post-hints-div']}>
+                                        <Typography className={styles['post-hints-text']}>Provide details about your idea. What do you want to achieve?
+                                             What experience do you have? What tech stack you want to use? 
+                                             How much time are you willing to put into work?</Typography>
+                                    </div>
                                     <div className={styles['project-description-div']}>
                                         <TextField
                                             fullWidth={true}
@@ -99,6 +104,9 @@ const CreateProject = () => {
                                             minRows='6'
                                             onChange={handleProjectDescription}
                                         />
+                                    </div>
+                                    <div className={styles['post-hints-div']}> 
+                                        <Typography className={styles['post-hints-text']}>Please provide at least one relevant tag ( type of project, technology, positions)</Typography>
                                     </div>
                                     <div className={styles['project-tags-div']}>
                                         <Autocomplete

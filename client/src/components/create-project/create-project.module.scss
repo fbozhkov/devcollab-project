@@ -2,7 +2,7 @@
 
 .wrapper {
     background-color: $main-background-color;
-    min-height: 120vh;
+    min-height: 100vh;
     padding-bottom: 32px;
 }
 
@@ -11,31 +11,38 @@
 }
 
 .create-project {
-    max-width: 75vw;
+    max-width: 800px;
     margin: 0 auto;
 }
 
 .input-fields-div {
     width: 100%;
     height: auto;
+    padding: 24px;
     background-color: $plain-white;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     border-radius: 3px;
 }
 
 .project-name-div {
-    display: flex;
-    padding: 24px 
+    display: flex; 
+    padding-bottom: 24px;
+}
+
+.post-hints-text {
+    font-size: 12px;
+    text-align: left;
+    color: $light-text-color;
 }
 
 .project-description-div {
-    padding: 16px 24px 24px 24px;
+    padding: 6px 0px 24px 0px;
 }
 
 .project-tags-div {
-    padding: 16px 24px 24px 24px;
+    padding: 6px 0px 24px 0px;
 }
 
 .post-project-button {
-    padding-bottom: 24px;
+    
 }
