@@ -16,11 +16,6 @@ const ProjectPage = () => {
         getProjectInfo()
     }, [])
 
-    if(isLoaded){
-        console.log(Object.values(project.tags))
-
-    }
-
     const getProjectInfo = () => {
         axios.get(`${baseUrl}/api/projects/project-info/${id}`)
             .then((response) => {
@@ -47,9 +42,7 @@ const ProjectPage = () => {
                     </div>
                     <div className={styles['project-tags-div']}>
                         {isLoaded && project && project.tags.map((tagObj, index) => {
-                            console.log('tag', tagObj)
                             const tag = Object.values(tagObj.tag)
-                            console.log('tagObj', tagObj);
                             return (
                                 <Chip key={index} label={tag} />
                             )

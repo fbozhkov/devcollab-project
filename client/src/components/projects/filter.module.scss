@@ -5,11 +5,13 @@
 
 .chips {
     display: flex;
+    flex-wrap: wrap;
     padding: 1rem;
 }
 
 .chip {
-    margin-right: 0.5rem;
+    margin-right: 8px;
+    margin-bottom: 8px;
     text-transform: uppercase;
     font-weight: 500;
 }

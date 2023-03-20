@@ -84,7 +84,6 @@ const SignUpDialog = (props) => {
             return false;
         }
         if (userNameRegEx.test(userName)) {
-            console.log('no username error')
             setUserNameError(false);
         }
         return true;
@@ -93,7 +92,6 @@ const SignUpDialog = (props) => {
     const submitForm = (e) => {
         e.preventDefault();
         if (formValidation()) {
-            console.log('form is valid')
             axios.post(`${baseUrl}/api/users/sign-up`, {
                 email: email,
                 password: password,

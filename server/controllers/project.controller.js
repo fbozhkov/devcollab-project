@@ -14,13 +14,13 @@ projectController.post('/post-project', authorizeUser, async (req,res) => {
     }
     const projectTags = req.body.projectTags;
     try {
-        await ProjectService.postProject(projectData, projectTags);
+        const newProject = await ProjectService.postProject(projectData, projectTags);
+        res.status(200).json(newProject.dataValues);
     }
     catch(error) {
         console.log(error.message);
         res.status(500);
-    }
-    res.status(200).json(req.user);
+    }  
 })
 
 projectController.get('/get-all-projects', async (req,res) => {
