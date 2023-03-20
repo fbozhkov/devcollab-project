@@ -122,12 +122,14 @@ const CreateProject = () => {
                                             )}
                                         />
                                     </div>
-                                    {postLoading ? <CircularProgress /> 
-                                        : 
-                                        <Button
-                                            type="submit"
-                                            variant="contained"
-                                        >Post Project</Button>}
+                                    <div className={styles['post-project-button']}>
+                                        {postLoading ? <CircularProgress /> 
+                                            : 
+                                            <Button
+                                                type="submit"
+                                                variant="contained"
+                                            >Post Project</Button>}
+                                    </div>
                                 </div>
                             </Box>
                             </div>
