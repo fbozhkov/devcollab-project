@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { setUserBio } from "../../redux/my-profile/actions";
+import { getUserBioSelector } from "../../redux/my-profile";
 import { Button, Box, Dialog, DialogActions, DialogContent, TextField, Typography, Snackbar, Alert} from '@mui/material'
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -9,11 +12,14 @@ import styles from './about.module.scss'
 const baseUrl = process.env.REACT_APP_API;
 
 const EditProfileDialog = (props) => {
-    const [bio, setBio] = useState(props.data.bio);
+    const [bio, setBio] = useState(userBio.bio);
     const [github, setGithub] = useState('');
     const [linkedIn, setLinkedIn] = useState('');
     const [twitter, setTwitter] = useState('');
-    console.log(props.data.bio,bio)
+
+    const dispatch = useDispatch();
+    const userBio = useSelector(getUserBioSelector()) 
+    console.log(bio)
 
     /* useEffect(() => {},[bio]); */
 
@@ -36,7 +42,7 @@ const EditProfileDialog = (props) => {
 
     const submitForm = (e) => {
         /* e.preventDefault(); */
-        axios.put(`${baseUrl}/api/users/additionalInfo`, {
+        axios.put(`${baseUrl}/api/users/set-user-bio`, {
             bio: bio,
             github: github,
             linkedIn: linkedIn,

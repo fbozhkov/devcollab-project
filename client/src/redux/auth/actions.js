@@ -13,12 +13,10 @@ export const loginRequest = ({ email, password }) => (dispatch) => {
     },
     { withCredentials: true })
         .then((response) => {
-            return response.data;
-        })
-        .then((userData) => {
+            const auth = response.data;
             dispatch({
                 type: LOGINSUCCESS,
-                payload: { email, userData } 
+                payload: { auth } 
             });
 
             return Promise.resolve();

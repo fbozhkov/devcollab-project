@@ -6,20 +6,17 @@ const defaultState = {
 };
 
 const entityHandlers = {
-    [LOGINSUCCESS]: (state, action) => {
-        // TODO: update login
-        const login = action.login;
-        const accessToken = action.userData.accessToken;
-        const admin = action.userData.admin;
-        return { ...state, isLoggedIn: true, login, accessToken, admin }
+    [LOGINSUCCESS]: (state, payload) => {
+        console.log(payload)
+        const user = payload.user;
+        const session = payload.session;
+        return { ...state, isLoggedIn: true, user, session }
     },
     [LOGINFAILED]: (state, action) => {
-        // TODO: update login
         const error = action;
         return { ...state, error }
     },
     [LOGOUT]: (state) => {
-        // TODO: update logout
         return { ...defaultState };
     },
 };

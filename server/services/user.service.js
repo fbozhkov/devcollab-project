@@ -99,7 +99,8 @@ export default class UserService {
     }
 
     static async signInUser(userEmail, userPassword) {
-        const user = await User.findOne({
+        let user = await User.findOne({
+            attributes: ['id', 'username', 'email', 'password'],
             where: {
                 email: userEmail 
             } 
@@ -229,33 +230,24 @@ export default class UserService {
     
     }
 
-    static async initAdditionalInfo(userId) {
+    static async initUserBio(userId) {
         const data = {id: userId}
         console.log(data)
-        const additionalInfo = UserInfo.create(data)
+        const userBio = UserInfo.create(data)
     }
 
-    static async addAdditionalInfo(payload, userId) {
-        try {
-            const data = { id: userId, ...payload }
-            const user = await UserInfo.findOne({
-                where: {
-                    id: userId
-                }
-            })
-
-            if(!user) {
-                throw new Error(404, 0, 'User not found')
+    static async addUserBio(payload, userId) {
+        const data = {id: userId, ...payload}
+        const user = await UserInfo.findOne({
+            where: {
+                id: userId
             }
-
-            await user.update(data)
-        }
-        catch (error) {
-            throw new Error(500, 0, 'Something went wrong')
-        }
+        })
+        const updatedUser = await user.update(data);
+        return updatedUser;
     }
 
-    static async getAdditionalInfo(userId) {
+    static async getUserBio(userId) {
         const user = await UserInfo.findOne({
             attributes: ['bio', 'github', 'linkedIn', 'twitter'],
             where: {
@@ -266,7 +258,7 @@ export default class UserService {
             return user;
         }
         else {
-            throw new Error (404, 0, 'Additional userInfo could not be found!')
+            throw new Error(404, 0, 'UserBio could not be found!')
         }
     }
 

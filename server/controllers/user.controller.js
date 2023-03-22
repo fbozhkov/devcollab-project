@@ -17,9 +17,11 @@ userController.post('/sign-up', async (req, res) => {
     }
     try {
         const user = await UserService.userSignUp(userData);
-        await UserService.initAdditionalInfo(user.dataValues.id);
-        user["success"] = 1;
-        res.status(200).json(user);
+        console.log('user')
+        console.log(user.dataValues.id)
+        await UserService.initUserBio(user.dataValues.id);
+        userData["success"] = 1;
+        res.status(200).json(userData);
     }
     catch(error){
         res.status(Number(error.status)).json(error);
@@ -68,9 +70,23 @@ userController.get('/sign-out', async (req,res) => {
     }
     catch(error) {
         console.log(error)
+        res.status(Number(error.status)).json(error);
     }
-    
-    
+})
+
+userController.put('/set-user-bio', authorizeUser, async (req,res) => {
+    try {
+        const user = await UserService.addUserBio(req.body, req.userId)
+        res.status(200).json({ message: 'Additional info added successfully' });
+    }
+    catch (error) {
+        if (error.status) {
+            res.status(Number(error.status)).json(error);
+        }
+        else {
+            res.status(500).json(error);
+        }
+    }
 })
 
 userController.put('/chageUserEmail', authorizeUser, async (req,res) => {
@@ -157,9 +173,9 @@ userController.get('/getUserAvatar/:id', async (req,res) => {
     }
 })
 
-userController.get('/getAdditionalInfo/:id', async (req, res) => {
+userController.get('/getUserBio/:id', async (req, res) => {
     try {
-        const userInfo = await UserService.getAdditionalInfo(req.params['id'])
+        const userInfo = await UserService.getUserBio(req.params['id'])
         res.status(200).json(userInfo);
     }
     catch (error) {
