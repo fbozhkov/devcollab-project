@@ -116,7 +116,7 @@ export default class UserService {
             const sessionID = uuidv4();
             const now = new Date();
             const expirationDate = new Date(+now + 3 * 24 * 60 * 60 * 1000);
-            const session = {
+            const newSessionData = {
                 user_id: user.id,
                 session_id: sessionID,
                 session_expiration_date: expirationDate
@@ -238,13 +238,19 @@ export default class UserService {
 
     static async addUserBio(payload, userId) {
         const data = {id: userId, ...payload}
+        console.log(data)
         const user = await UserInfo.findOne({
             where: {
                 id: userId
             }
         })
-        const updatedUser = await user.update(data);
-        return updatedUser;
+        if (user) {
+            const updatedUser = await user.update(data);
+            return updatedUser;
+        }
+        else {
+            throw new Error(404, 0, 'UserBio could not be found!')
+        }
     }
 
     static async getUserBio(userId) {

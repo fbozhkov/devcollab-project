@@ -14,7 +14,7 @@ export const getUserAvatar = (userId) => (dispatch) => {
         .then((response) => {
             dispatch({
                 type: GETUSERAVATAR,
-                payload: response.data.avatar_url
+                payload: response.data
             });
         })
         .catch((error) => {

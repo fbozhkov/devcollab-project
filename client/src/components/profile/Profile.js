@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserId, getUsername } from "../../redux/auth/selectors";
 import { getUserAvatarSelector, getUserBioSelector } from "../../redux/my-profile";
 import { getUserAvatar, getUserBio } from "../../redux/my-profile";
-import { Typography, Avatar, Button, Paper } from "@mui/material";
+import { Typography, Avatar, Button, Paper, CircularProgress } from "@mui/material";
 import styles from './profile.module.scss';
 import EditProfileDialog from "../about/EditProfileDialog";
 
@@ -12,35 +12,23 @@ const Profile = () => {
     const [openEditProfile, setOpenEditProfile] = useState(false)
     
     const dispatch = useDispatch()
-    const userId = useSelector(getUserId())
-    const userName = useSelector(getUsername())
-    const userAvatar = useSelector(getUserAvatarSelector())
-    const userBio = useSelector(getUserBioSelector())
+    const userId = useSelector(getUserId)
+    const userName = useSelector(getUsername)
+    const userAvatar = useSelector(getUserAvatarSelector)
+    const userBio = useSelector(getUserBioSelector)
+    console.log(userBio)
 
     useEffect(() => {
         profileApiCall();
     }, [])
 
-    useEffect(() => {
-        apiResponse();
-    }, [userAvatar, userBio])
-
-    const profileApiCall = () => {
-        dispatch(getUserAvatar(userId))
-            .catch((error) => {
-                console.log(`Error fetching data:${error.message}`);
-            })
-        dispatch(getUserBio(userId))
-            .catch((error) => {
-                console.log(`Error fetching data:${error.message}`);
-            })
+    const profileApiCall = async () => {
+        await Promise.all([dispatch(getUserAvatar(userId)), dispatch(getUserBio(userId))]);
+        console.log('Updated userAvatar:', userAvatar);
+        console.log('Updated userBio:', userBio);
+        setDataIsLoaded(true);
     }
 
-    const apiResponse = () => {
-        if (userAvatar && userBio) {
-            setDataIsLoaded(true)
-        }
-    }
     const handleEditProfile = () => {
         setOpenEditProfile(true)
     }
@@ -73,7 +61,10 @@ const Profile = () => {
                 </Paper>   
             </div>
                 
-            : null }
+            : 
+            <div className={styles['loading-div']}>
+                <CircularProgress />
+            </div> }
         </div>
     )
 }

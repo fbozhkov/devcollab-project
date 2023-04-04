@@ -65,7 +65,7 @@ const HamburgerMenu = () => {
 
     return (
         <div>
-            <HamburgerContext.Provider value={{ open, setOpen }}>
+            {/* <HamburgerContext.Provider value={{ open, setOpen }}> */}
             <IconButton onClick={handleClickOpen}>
                 <MenuIcon />
             </IconButton>
@@ -93,7 +93,7 @@ const HamburgerMenu = () => {
                     }
                 </DialogContent>
             </Dialog>
-            </HamburgerContext.Provider> 
+            {/* </HamburgerContext.Provider>  */}
         </div>
     );
 }

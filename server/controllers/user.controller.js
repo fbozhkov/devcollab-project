@@ -42,21 +42,6 @@ userController.post('/sign-in', async (req,res) => {
     }
 })
 
-userController.put('/additionalInfo', authorizeUser, async (req,res) => {
-    try {
-        await UserService.addAdditionalInfo(req.body, req.userId);
-        res.status(200).json({message: 'Additional info added successfully'});
-    }
-    catch(error){
-        if(error.status) {
-            res.status(Number(error.status)).json(error);
-        }
-        else {
-            res.status(500).json(error);
-        }
-    }
-})
-
 userController.get('/sign-out', async (req,res) => {
     try {
         const cookie = req.headers.cookie;
