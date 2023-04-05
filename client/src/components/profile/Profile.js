@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserId, getUsername } from "../../redux/auth/selectors";
 import { getUserAvatarSelector, getUserBioSelector } from "../../redux/my-profile";
 import { getUserAvatar, getUserBio } from "../../redux/my-profile";
-import { Typography, Avatar, Button, Paper, CircularProgress } from "@mui/material";
+import { Typography, Avatar, Button, Paper, CircularProgress, IconButton } from "@mui/material";
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import TwitterIcon from '@mui/icons-material/Twitter';
 import styles from './profile.module.scss';
 import EditProfileDialog from "../about/EditProfileDialog";
 
@@ -41,7 +44,18 @@ const Profile = () => {
                     <div className={styles['profile-heading-div']}>
                         <div className={styles['avatar-and-username']}>
                             <Avatar className={styles['avatar']} alt="img" src={userAvatar} />
-                                <Typography className={styles['profile-heading-text']}> {userName}</Typography>
+                            <Typography className={styles['profile-heading-text']}> {userName}</Typography>
+                            <div className={styles['social-media-div']}>
+                                <IconButton className={styles['social-media-icon']} href={userBio.github} target="_blank">
+                                    <GitHubIcon />
+                                </IconButton>
+                                <IconButton className={styles['social-media-icon']} href={userBio.linkedIn} target="_blank">
+                                    <LinkedInIcon />
+                                </IconButton>
+                                <IconButton className={styles['social-media-icon']} href={userBio.twitter} target="_blank">
+                                    <TwitterIcon />
+                                </IconButton>
+                            </div>
                         </div>
                         <div className={styles['edit-profile-div']}>
                             <div className={styles['edit-profile-button-div']}>
