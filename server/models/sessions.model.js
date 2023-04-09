@@ -1,6 +1,10 @@
 import db from '../config/db.config.js'
 import User from './user.model.js'
 import { Sequelize, DataTypes } from "sequelize"
+import * as dotenv from 'dotenv'
+dotenv.config();
+
+const { SYNC_DB } = process.env;
 
 const Sessions = db.sequelize.define (
     'Sessions',
@@ -32,6 +36,8 @@ const Sessions = db.sequelize.define (
     }
 )
 
-Sessions.sync()
+if (SYNC_DB === 'true') {
+    Sessions.sync()
+}
 
 export default Sessions

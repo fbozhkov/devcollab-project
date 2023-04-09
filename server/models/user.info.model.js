@@ -1,6 +1,10 @@
 import db from "../config/db.config.js";
 import User from './user.model.js';
 import { Sequelize } from "sequelize";
+import * as dotenv from 'dotenv'
+dotenv.config();
+
+const { SYNC_DB } = process.env;
 
 const UserInfo = db.sequelize.define (
     'UserInfo',
@@ -39,6 +43,8 @@ const UserInfo = db.sequelize.define (
     }
 )
 
-UserInfo.sync()
+if (SYNC_DB === 'true') {
+    UserInfo.sync()
+}
 
 export default UserInfo

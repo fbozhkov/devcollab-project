@@ -62,6 +62,7 @@ export default class UserService {
         userData['avatar_url'] = result.secure_url;
 
         const newUser = User.create(userData);
+        delete newUser.password;
         return newUser;
     }
 

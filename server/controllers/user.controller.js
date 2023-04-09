@@ -9,7 +9,6 @@ import UserService from "../services/user.service.js";
 const userController = express.Router();
 
 userController.post('/sign-up', async (req, res) => {
-    console.log(req.body);
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const userData = {
         email: req.body.email,
@@ -18,50 +17,24 @@ userController.post('/sign-up', async (req, res) => {
     }
     try {
         const user = await UserService.userSignUp(userData);
-        console.log('user')
-        console.log(user.dataValues.id)
+        delete user.dataValues.password
         await UserService.initAdditionalInfo(user.dataValues.id);
-        userData["success"] = 1;
-        res.status(200).json(userData);
+        user["success"] = 1;
+        res.status(200).json(user);
     }
-    catch(e){
-        console.log('catch block');
-        console.log(e);
-        res.status(Number(e.status)).json(e);
-    }
-})
-
-userController.get('/test', async (req,res) => {
-    try {
-        const avatarResponse = await axios.get('https://ui-avatars.com/api/?background=random', { responseType: 'arraybuffer' })
-        res.set('Content-Type', avatarResponse.headers['content-type']);
-        res.status(200).send(avatarResponse.data);
-        let cld_upload_stream = cloudinary.v2.uploader.upload_stream(
-            {
-                folder: 'test'
-            },
-            (error, result) => {
-                console.log(error,result);
-                console.log(result.secure_url)
-            }
-        );
-        streamifier.createReadStream(avatarResponse.data).pipe(cld_upload_stream) 
-    }
-    catch(error) {
-        console.log(error)
+    catch(error){
+        res.status(Number(error.status)).json(error);
     }
 })
 
 userController.post('/sign-in', async (req,res) => {
-    console.log(req.body)
     try {
         const auth = await UserService.signInUser(req.body.email, req.body.password)
         res.cookie('sessionID', auth.session_id, { expires: auth.session_expiration_date, sameSite: 'None', secure: true, httpOnly: true })
         res.status(200).json({'authentication': auth, 'message': 'Authentication succeeded!', 'success': 1})
     }
-    catch(e) {
-        console.log(e)
-        res.status(Number(e.status)).json(e);
+    catch(error) {
+        res.status(Number(error.status)).json(error);
     }
 })
 

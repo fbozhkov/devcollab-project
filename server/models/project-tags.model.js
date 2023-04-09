@@ -2,6 +2,10 @@ import db from "../config/db.config.js";
 import Projects from './projects.model.js'
 import Tags from './tags.model.js'
 import { Sequelize } from "sequelize";
+import * as dotenv from 'dotenv'
+dotenv.config();
+
+const { SYNC_DB } = process.env;
 
 const ProjectTags = db.sequelize.define(
     'Project Tags',
@@ -38,6 +42,8 @@ otherKey:'project_id', as: 'projects' });
 Projects.belongsToMany(Tags, { through: ProjectTags, foreignKey: 'project_id',
 otherKey:'project_tag_id', as: 'tags' });
 
-ProjectTags.sync()
+if (SYNC_DB === 'true') {
+    ProjectTags.sync()
+}
 
 export default ProjectTags
