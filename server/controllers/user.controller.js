@@ -17,7 +17,6 @@ userController.post('/sign-up', async (req, res) => {
     }
     try {
         const user = await UserService.userSignUp(userData);
-        delete user.dataValues.password
         await UserService.initAdditionalInfo(user.dataValues.id);
         user["success"] = 1;
         res.status(200).json(user);
@@ -29,27 +28,49 @@ userController.post('/sign-up', async (req, res) => {
 
 userController.post('/sign-in', async (req,res) => {
     try {
-        const auth = await UserService.signInUser(req.body.email, req.body.password)
+        const authInstance = await UserService.signInUser(req.body.email, req.body.password);
+        const auth = authInstance.dataValues;
+        console.log(auth)
         res.cookie('sessionID', auth.session_id, { expires: auth.session_expiration_date, sameSite: 'None', secure: true, httpOnly: true })
         res.status(200).json({'authentication': auth, 'message': 'Authentication succeeded!', 'success': 1})
     }
     catch(error) {
+        console.log(error)
         res.status(Number(error.status)).json(error);
     }
 })
 
 userController.put('/additionalInfo', authorizeUser, async (req,res) => {
     try {
-        await UserService.addAdditionalInfo(req.body, req.userId)
+        await UserService.addAdditionalInfo(req.body, req.userId);
+        res.status(200).json({message: 'Additional info added successfully'});
     }
     catch(error){
-        console.log(error)
+        if(error.status) {
+            res.status(Number(error.status)).json(error);
+        }
+        else {
+            res.status(500).json(error);
+        }
     }
 })
 
-userController.get('/log-out', async (req,res) => {
-    res.cookie('sessionID', 'none', { expires: new Date(Date.now()), sameSite: 'None', secure: true, httpOnly: true })
-    res.status(200).json({message: 'Successfully logged out'});
+userController.get('/sign-out', async (req,res) => {
+    try {
+        const cookie = req.headers.cookie;
+        const session = req.headers.cookie?.split(';').find(cookie => cookie.includes('sessionID'));
+        if (session) {
+            const sessionID = session.split("=")[1];
+            await UserService.signOutUser(sessionID);
+        }
+        res.cookie('sessionID', 'none', { expires: new Date(Date.now()), sameSite: 'None', secure: true, httpOnly: true })
+        res.status(200).json({ message: 'Successfully signed out' });
+    }
+    catch(error) {
+        console.log(error)
+    }
+    
+    
 })
 
 userController.put('/chageUserEmail', authorizeUser, async (req,res) => {

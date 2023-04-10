@@ -131,6 +131,24 @@ export default class UserService {
         }
     }
 
+    static async signOutUser(sessionId) { 
+        const session = await Sessions.findOne({
+            where: {
+                session_id: sessionId
+            }
+        })
+        if (session) {
+            await Sessions.destroy({
+                where: {
+                    session_id: sessionId
+                }
+            })
+        }
+        else {
+            throw new Error('401', 0, 'Invalid sessionID');
+        }
+    }
+
     static async chageUserEmail(newEmail, userId) {
         const user = await User.findOne({
             attributes: ['id', 'email'],
@@ -218,13 +236,23 @@ export default class UserService {
     }
 
     static async addAdditionalInfo(payload, userId) {
-        const data = {id: userId, ...payload}
-        const user = await UserInfo.findOne({
-            where: {
-                id: userId
+        try {
+            const data = { id: userId, ...payload }
+            const user = await UserInfo.findOne({
+                where: {
+                    id: userId
+                }
+            })
+
+            if(!user) {
+                throw new Error(404, 0, 'User not found')
             }
-        })
-        await user.update(data)
+
+            await user.update(data)
+        }
+        catch (error) {
+            throw new Error(500, 0, 'Something went wrong')
+        }
     }
 
     static async getAdditionalInfo(userId) {

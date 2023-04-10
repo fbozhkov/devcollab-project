@@ -5,6 +5,7 @@ import { jest } from '@jest/globals';
 
 jest.spyOn(UserService, 'userSignUp').mockImplementation(jest.fn());
 jest.spyOn(UserService, 'initAdditionalInfo').mockImplementation(jest.fn());
+jest.spyOn(UserService, 'signInUser').mockImplementation(jest.fn());
 
 describe('User Controller', () => {
     beforeEach(() => {
@@ -43,6 +44,35 @@ describe('User Controller', () => {
     expect(responseBody.dataValues).toHaveProperty('userName', userData.userName);
     expect(responseBody).toHaveProperty('success', 1);
     expect(responseBody).not.toHaveProperty('password');
-
     })
+
+
+    test('should sign in a user successfully and return sessionID cookie', async () => {
+        const userData = {
+            email: 'test@gmail.com',
+            password: 'testpass1'
+        }; 
+        const now = new Date();
+        UserService.signInUser.mockResolvedValueOnce({
+            dataValues: {
+                user_id: 1,
+                session_id: '1234',
+                session_expiration_date: new Date(+now + 3 * 24 * 60 * 60 * 1000)
+            }
+        });
+
+        const request = supertest(app);
+        const response = await request.post('/api/users/sign-in')
+            .send(userData)
+            .set('Accept', 'application/json');
+
+        expect(response.status).toEqual(200);
+        const sessionIDCookie = response.headers['set-cookie'].find(cookie => cookie.startsWith('sessionID='));
+        expect(sessionIDCookie).toBeDefined();
+        expect(sessionIDCookie).toContain('1234');
+        expect(UserService.signInUser).toHaveBeenCalledTimes(1);
+        const responseBody = response.body;
+        expect(responseBody).toHaveProperty('success', 1);
+    })
+
 })
