@@ -19,7 +19,6 @@ const Profile = () => {
     const userName = useSelector(getUsername)
     const userAvatar = useSelector(getUserAvatarSelector)
     const userBio = useSelector(getUserBioSelector)
-    console.log(userBio)
 
     useEffect(() => {
         profileApiCall();

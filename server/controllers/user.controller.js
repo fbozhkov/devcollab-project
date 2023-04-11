@@ -17,11 +17,9 @@ userController.post('/sign-up', async (req, res) => {
     }
     try {
         const user = await UserService.userSignUp(userData);
-        console.log('user')
-        console.log(user.dataValues.id)
         await UserService.initUserBio(user.dataValues.id);
-        userData["success"] = 1;
-        res.status(200).json(userData);
+        user["success"] = 1;
+        res.status(200).json(user);
     }
     catch(error){
         res.status(Number(error.status)).json(error);
@@ -30,15 +28,14 @@ userController.post('/sign-up', async (req, res) => {
 
 userController.post('/sign-in', async (req,res) => {
     try {
-        const authInstance = await UserService.signInUser(req.body.email, req.body.password);
-        const auth = authInstance.dataValues;
-        console.log(auth)
-        res.cookie('sessionID', auth.session_id, { expires: auth.session_expiration_date, sameSite: 'None', secure: true, httpOnly: true })
-        res.status(200).json({'authentication': auth, 'message': 'Authentication succeeded!', 'success': 1})
+        const { user, newSession } = await UserService.signInUser(req.body.email, req.body.password);
+        const session = newSession.dataValues;
+        res.cookie('sessionID', session.session_id, { expires: session.session_expiration_date, sameSite: 'None', secure: true, httpOnly: true })
+        res.status(200).json({user, session, 'message': 'Authentication succeeded!', 'success': 1})
     }
     catch(error) {
         console.log(error)
-        res.status(Number(error.status)).json(error);
+        /* res.status(Number(error.status)).json(error); */
     }
 })
 
@@ -54,7 +51,6 @@ userController.get('/sign-out', async (req,res) => {
         res.status(200).json({ message: 'Successfully signed out' });
     }
     catch(error) {
-        console.log(error)
         res.status(Number(error.status)).json(error);
     }
 })
@@ -80,7 +76,6 @@ userController.put('/chageUserEmail', authorizeUser, async (req,res) => {
         res.status(200).json({message: 'Email changed successfully'})
     }
     catch(error) {
-        console.log(error)
         res.status(Number(error.status)).json(error);
     }
 })
@@ -91,14 +86,12 @@ userController.put('/changeUserPassword', authorizeUser, async (req,res) => {
         res.status(200).json({message: 'Password changed successfully'})
     }
     catch(error) {
-        console.log(error)
         res.status(Number(error.status)).json(error);
     }
 })
 
 userController.get('/getAllUsers', async (req, res) => {
     const users = await UserService.getAllUsers();
-    console.log('users?',users);
     if (users) {
         res.status(200).json(users);
     }
@@ -112,15 +105,12 @@ userController.get('/validateUser', async (req, res) => {
     const session = req.headers.cookie?.split(';').find( cookie => cookie.includes('sessionID'));
     if(session) {
         const sessionID = session.split("=")[1];
-        console.log(`sessionID: ${sessionID}`)
         try {
             const user = await UserService.validateUserSession(sessionID)
             user.dataValues['success'] = 1;
-            console.log(user)
             res.status(200).json(user);
         }
         catch(error){
-            console.log(`error: ${error.message}`)
             res.status(error.status).json(error.message);
         }
     }
@@ -139,7 +129,7 @@ userController.get('/getUserData', async (req,res) => {
             res.status(200).json(userData)
         }
         catch(error){
-            console.log(`error: ${error.message}`);
+            res.status(Number(error.status)).json(error);
         }
     }
     else {
@@ -153,7 +143,6 @@ userController.get('/getUserAvatar/:id', async (req,res) => {
         res.status(200).json(avatar);
     }
     catch(error){
-        console.log(error)
         res.status(Number(error.status)).json(error);
     }
 })
@@ -164,7 +153,6 @@ userController.get('/getUserBio/:id', async (req, res) => {
         res.status(200).json(userInfo);
     }
     catch (error) {
-        console.log(error)
         res.status(Number(error.status)).json(error);
     }
 })

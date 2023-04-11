@@ -32,7 +32,6 @@ export default class UserService {
             throw new FormError('409', 0, `User with an email: ${userData.email} already exists!`, 'email')
         }
         if (userName) {
-            console.log(`userName: ${userName}`)
             throw new FormError('409', 0, 'Username already taken! Please choose a different one!', 'username')
         }
         
@@ -58,7 +57,7 @@ export default class UserService {
             });
         }
         
-        let result = await uploadFromBuffer(avatarResponse)
+        let result = await uploadFromBuffer(avatarResponse);
         userData['avatar_url'] = result.secure_url;
 
         const newUser = User.create(userData);
@@ -71,8 +70,7 @@ export default class UserService {
         const users = await User.findAll({
             attributes:['id','username','email']
         }).catch(error => {
-            console.log(`error in getAllUsers: ${error}`)
-            return error.message
+            throw new Error('500', 0, error.message);
         })
         return users;
     }
@@ -82,8 +80,7 @@ export default class UserService {
             attributes: ['user_id' ,'session_id', 'session_creation_date', 'session_exipiration_date'],
             where: {}
         }).catch(error => {
-            console.log(`error in deleteAllSessions: ${error}`)
-            return error.message
+            throw new Error('500', 0, error.message);
         })
     }
 
@@ -92,8 +89,7 @@ export default class UserService {
             attributes:['id', 'username', 'email', 'password'],
             where: {}
         }).catch(error => {
-            console.log(`error in deleteAllUsers: ${error}`)
-            return error.message
+            throw new Error('500', 0, error.message);
         })
         return 'all users deleted';
     }
@@ -121,8 +117,9 @@ export default class UserService {
                 session_id: sessionID,
                 session_expiration_date: expirationDate
             }
-            const newSession = await Sessions.create(session);
-            return newSession;
+            const newSession = await Sessions.create(newSessionData);
+            delete user.dataValues.password;
+            return { user, newSession};
         }
         else if (passwordMatch === false){
             throw new FormError('401', 0, 'Wrong password!', 'password');
@@ -225,20 +222,18 @@ export default class UserService {
             return user;
         }
         else {
-            throw new Error (404, 0, 'Avatar url could not be found')
+            throw new Error (404, 0, 'Avatar url could not be found');
         }
     
     }
 
     static async initUserBio(userId) {
         const data = {id: userId}
-        console.log(data)
-        const userBio = UserInfo.create(data)
+        const userBio = UserInfo.create(data);
     }
 
     static async addUserBio(payload, userId) {
         const data = {id: userId, ...payload}
-        console.log(data)
         const user = await UserInfo.findOne({
             where: {
                 id: userId
@@ -249,7 +244,7 @@ export default class UserService {
             return updatedUser;
         }
         else {
-            throw new Error(404, 0, 'UserBio could not be found!')
+            throw new Error(404, 0, 'UserBio could not be found!');
         }
     }
 
@@ -264,7 +259,7 @@ export default class UserService {
             return user;
         }
         else {
-            throw new Error(404, 0, 'UserBio could not be found!')
+            throw new Error(404, 0, 'UserBio could not be found!');
         }
     }
 

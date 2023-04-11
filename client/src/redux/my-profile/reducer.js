@@ -19,7 +19,6 @@ const entityHandlers = {
     },
     [GETUSERBIO]: (state, payload) => {
         const bio  = payload;
-        console.log(bio)
         return { ...state, bio }
     },
     [GETUSERBIOERROR]: (state, payload) => {

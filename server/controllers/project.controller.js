@@ -6,7 +6,6 @@ import { authorizeUser } from "../middleware/auth.js";
 const projectController = express.Router();
 
 projectController.post('/post-project', authorizeUser, async (req,res) => {
-    console.log(`body:${req.body}`);
     const projectData = {
         creator_id: req.userId,
         project_title: req.body.projectName,
@@ -18,7 +17,6 @@ projectController.post('/post-project', authorizeUser, async (req,res) => {
         res.status(200).json(newProject.dataValues);
     }
     catch(error) {
-        console.log(error.message);
         res.status(500);
     }  
 })
@@ -29,7 +27,6 @@ projectController.get('/get-all-projects', async (req,res) => {
         res.status(200).json(projects);
     }
     catch(error) {
-        console.log(error);
         res.status(500).json(error);
     }
     
@@ -41,7 +38,6 @@ projectController.get('/project-info/:id', async (req,res) => {
         res.status(200).json(project);
     }
     catch(error) {
-        console.log(error);
         res.status(500).json(error);
     }
 })

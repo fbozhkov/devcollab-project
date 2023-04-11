@@ -4,13 +4,13 @@ import UserService from "../../services/user.service.js";
 import { jest } from '@jest/globals';
 
 jest.spyOn(UserService, 'userSignUp').mockImplementation(jest.fn());
-jest.spyOn(UserService, 'initAdditionalInfo').mockImplementation(jest.fn());
+jest.spyOn(UserService, 'initUserBio').mockImplementation(jest.fn());
 jest.spyOn(UserService, 'signInUser').mockImplementation(jest.fn());
 
 describe('User Controller', () => {
     beforeEach(() => {
         UserService.userSignUp.mockClear();
-        UserService.initAdditionalInfo.mockClear();
+        UserService.initUserBio.mockClear();
     });
 
     test('should sign up a user successfully', async () => {
@@ -28,7 +28,7 @@ describe('User Controller', () => {
         },
     });
 
-    UserService.initAdditionalInfo.mockResolvedValueOnce(true);
+    UserService.initUserBio.mockResolvedValueOnce(true);
 
     const request = supertest(app);
     const response = await request.post('/api/users/sign-up')
@@ -37,7 +37,7 @@ describe('User Controller', () => {
 
     expect(response.status).toEqual(200);
     expect(UserService.userSignUp).toHaveBeenCalledTimes(1);
-    expect(UserService.initAdditionalInfo).toHaveBeenCalledTimes(1);
+    expect(UserService.initUserBio).toHaveBeenCalledTimes(1);
     const responseBody = response.body;
     expect(responseBody.dataValues).toHaveProperty('id', 1);
     expect(responseBody.dataValues).toHaveProperty('email', userData.email);
@@ -54,10 +54,17 @@ describe('User Controller', () => {
         }; 
         const now = new Date();
         UserService.signInUser.mockResolvedValueOnce({
-            dataValues: {
-                user_id: 1,
-                session_id: '1234',
-                session_expiration_date: new Date(+now + 3 * 24 * 60 * 60 * 1000)
+            user: {
+                id: 1,
+                username: 'testuser',
+                email: 'test@gmail.com'
+            } ,
+            newSession: {
+                dataValues: {
+                    user_id: 1,
+                    session_id: '1234',
+                    session_expiration_date: new Date(+now + 3 * 24 * 60 * 60 * 1000)
+                }
             }
         });
 

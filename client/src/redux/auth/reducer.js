@@ -9,11 +9,8 @@ const defaultState = {
 
 const entityHandlers = {
     [LOGINSUCCESS]: (state, payload) => {
-        console.log(payload)
         const user = payload.auth.user;
         const session = payload.auth.session;
-        console.log(user)
-        console.log(session)
         return { ...state, isLoggedIn: true, user, session }
     },
     [LOGINFAILED]: (state, action) => {
