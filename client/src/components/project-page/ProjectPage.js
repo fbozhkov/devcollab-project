@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from "react";
 import { useParams } from "react-router-dom";
-import { Typography, Chip } from "@mui/material";
+import { Typography, Chip, CircularProgress } from "@mui/material";
 import axios from "axios";
 import styles from './project-page.module.scss'
 
@@ -29,16 +29,17 @@ const ProjectPage = () => {
 
     return (
         <div className={styles['wrapper']}>
-            <Typography>
+            <Typography variant="h2">
                 Project Page
             </Typography>
+            { isLoaded ?
             <div className={styles['project']}>
                 <div className={styles['project-details-div']}>
                     <div className={styles['project-name-div']}>
-                        <Typography>{project.project_title}</Typography>
+                        <Typography variant='h5'>{project.project_title}</Typography>
                     </div>
                     <div className={styles['project-description-div']}>
-                                <Typography>{project.project_description}</Typography>
+                        <Typography>{project.project_description}</Typography>
                     </div>
                     <div className={styles['project-tags-div']}>
                         {isLoaded && project && project.tags.map((tagObj, index) => {
@@ -49,7 +50,11 @@ const ProjectPage = () => {
                         })}
                     </div>
                 </div>
-            </div>
+            </div> :
+                <div className={styles['loading']}>
+                    <CircularProgress />
+                </div>}
+            
         </div>
     )
 }
