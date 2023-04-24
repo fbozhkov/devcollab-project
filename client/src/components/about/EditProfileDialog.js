@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { setUserBio } from "../../redux/my-profile/actions";
+import { getUserBioSelector } from "../../redux/my-profile";
 import { Button, Box, Dialog, DialogActions, DialogContent, TextField, Typography, Snackbar, Alert} from '@mui/material'
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -9,13 +12,15 @@ import styles from './about.module.scss'
 const baseUrl = process.env.REACT_APP_API;
 
 const EditProfileDialog = (props) => {
-    const [bio, setBio] = useState(props.data.bio);
-    const [github, setGithub] = useState('');
-    const [linkedIn, setLinkedIn] = useState('');
-    const [twitter, setTwitter] = useState('');
-    console.log(props.data.bio,bio)
+    const userBio = useSelector(getUserBioSelector) 
 
-    /* useEffect(() => {},[bio]); */
+    const [bio, setBio] = useState(userBio.bio);
+    const [github, setGithub] = useState(userBio.github);
+    const [linkedIn, setLinkedIn] = useState(userBio.linkedIn);
+    const [twitter, setTwitter] = useState(userBio.twitter);
+    const [loading, setLoading] = useState(false);
+
+    const dispatch = useDispatch();
 
     const handleClose = () => {
         props.setOpen(false);
@@ -35,15 +40,17 @@ const EditProfileDialog = (props) => {
     }
 
     const submitForm = (e) => {
-        /* e.preventDefault(); */
-        axios.put(`${baseUrl}/api/users/additionalInfo`, {
-            bio: bio,
-            github: github,
-            linkedIn: linkedIn,
-            twitter: twitter
-        },
-        {withCredentials: true})
-        console.log('form submited')
+       /*  e.preventDefault(); */
+        setLoading(true);
+        const payload = { bio, github, linkedIn, twitter };
+        dispatch(setUserBio(payload))
+            .then(() => {
+                setLoading(false);
+            })
+            .catch((error) => {
+                setLoading(false);
+                console.log(error.response.data)
+            })
     }
 
     return (
@@ -55,7 +62,7 @@ const EditProfileDialog = (props) => {
                     </div>
                     <div className={styles['edit-profile-info-textfield-div']}>
                         <TextField
-                            /* placeholder="Add a Bio" */
+                            placeholder="Add a Bio"
                             value={bio}
                             fullWidth={true}
                             multiline={true}
@@ -67,6 +74,7 @@ const EditProfileDialog = (props) => {
                         <div className={styles['edit-profile-info-icon-textfield']}>
                             <GitHubIcon className={styles['icon']} />
                             <TextField
+                                value={github}
                                 size="small"
                                 placeholder="Github"
                                 onChange={handleGithub} />

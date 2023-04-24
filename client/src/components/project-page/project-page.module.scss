@@ -2,17 +2,17 @@
 
 .wrapper {
     background-color: $main-background-color;
-    height: 200vh;
+    min-height: 75vh;
 }
 
 .project {
     max-width: 75vw;
     margin: 0 auto;
+    padding: 48px 0;
 }
 
 .project-details-div {
     width: 100%;
-    height: 600px;
     background-color: $plain-white;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     border-radius: 3px;
@@ -29,4 +29,11 @@
 
 .project-tags-div {
     padding: 16px 24px 24px 24px;
+}
+
+.loading {
+    display: flex;
+    padding-top: 48px;
+    justify-content: center;
+    align-items: center;
 }

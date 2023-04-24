@@ -13,12 +13,10 @@ export const loginRequest = ({ email, password }) => (dispatch) => {
     },
     { withCredentials: true })
         .then((response) => {
-            return response.data;
-        })
-        .then((userData) => {
+            const auth = response.data;
             dispatch({
                 type: LOGINSUCCESS,
-                payload: { email, userData } 
+                payload: { auth } 
             });
 
             return Promise.resolve();
@@ -36,7 +34,7 @@ export const loginRequest = ({ email, password }) => (dispatch) => {
 }
 
 export const logout = () => (dispatch) => {
-    axios.get(`${baseUrl}/api/users/log-out`, { withCredentials: true }); 
+    axios.get(`${baseUrl}/api/users/sign-out`, { withCredentials: true }); 
     dispatch({
         type: LOGOUT,
     });

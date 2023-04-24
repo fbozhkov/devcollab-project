@@ -6,16 +6,14 @@
 }
 
 .card-div {
-    padding-top: 48px;
+    padding: 48px 0;
 }
 
 .profile-content {
     max-width: 900px;
     min-height: 500px;
     margin: 0 auto;
-    padding-top: 16px;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding: 16px;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
@@ -67,6 +65,7 @@
 }
 
 .edit-profile-info-bio-text {
+    white-space: pre-wrap;
     text-align: left;
 }
 
@@ -84,4 +83,8 @@
 .password-paper {
     width: 400px;
     height: 400px;
+}
+
+.loading-div {
+    padding-top: 48px;
 }

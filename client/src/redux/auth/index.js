@@ -9,4 +9,6 @@ export {
 } from './actions';
 export {
     getIsLoggedIn,
+    getUserId,
+    getUsername
 } from './selectors';

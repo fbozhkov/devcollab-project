@@ -1,6 +1,10 @@
 import db from "../config/db.config.js";
 import User from './user.model.js';
 import { Sequelize, DataTypes } from "sequelize";
+import * as dotenv from 'dotenv'
+dotenv.config();
+
+const { SYNC_DB } = process.env;
 
 const Projects = db.sequelize.define (
     'Projects',
@@ -47,6 +51,8 @@ const Projects = db.sequelize.define (
     }
 )
 
-Projects.sync()
+if (SYNC_DB === 'true') {
+    Projects.sync()
+}
 
 export default Projects

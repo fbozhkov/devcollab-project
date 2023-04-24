@@ -32,7 +32,6 @@ export default class UserService {
             throw new FormError('409', 0, `User with an email: ${userData.email} already exists!`, 'email')
         }
         if (userName) {
-            console.log(`userName: ${userName}`)
             throw new FormError('409', 0, 'Username already taken! Please choose a different one!', 'username')
         }
         
@@ -58,10 +57,11 @@ export default class UserService {
             });
         }
         
-        let result = await uploadFromBuffer(avatarResponse)
+        let result = await uploadFromBuffer(avatarResponse);
         userData['avatar_url'] = result.secure_url;
 
         const newUser = User.create(userData);
+        delete newUser.password;
         return newUser;
     }
 
@@ -70,8 +70,7 @@ export default class UserService {
         const users = await User.findAll({
             attributes:['id','username','email']
         }).catch(error => {
-            console.log(`error in getAllUsers: ${error}`)
-            return error.message
+            throw new Error('500', 0, error.message);
         })
         return users;
     }
@@ -81,8 +80,7 @@ export default class UserService {
             attributes: ['user_id' ,'session_id', 'session_creation_date', 'session_exipiration_date'],
             where: {}
         }).catch(error => {
-            console.log(`error in deleteAllSessions: ${error}`)
-            return error.message
+            throw new Error('500', 0, error.message);
         })
     }
 
@@ -91,14 +89,14 @@ export default class UserService {
             attributes:['id', 'username', 'email', 'password'],
             where: {}
         }).catch(error => {
-            console.log(`error in deleteAllUsers: ${error}`)
-            return error.message
+            throw new Error('500', 0, error.message);
         })
         return 'all users deleted';
     }
 
     static async signInUser(userEmail, userPassword) {
-        const user = await User.findOne({
+        let user = await User.findOne({
+            attributes: ['id', 'username', 'email', 'password'],
             where: {
                 email: userEmail 
             } 
@@ -114,19 +112,38 @@ export default class UserService {
             const sessionID = uuidv4();
             const now = new Date();
             const expirationDate = new Date(+now + 3 * 24 * 60 * 60 * 1000);
-            const session = {
+            const newSessionData = {
                 user_id: user.id,
                 session_id: sessionID,
                 session_expiration_date: expirationDate
             }
-            const newSession = await Sessions.create(session);
-            return newSession;
+            const newSession = await Sessions.create(newSessionData);
+            delete user.dataValues.password;
+            return { user, newSession};
         }
         else if (passwordMatch === false){
             throw new FormError('401', 0, 'Wrong password!', 'password');
         }
         else {
             throw new Error('500', 0, 'Something went wrong :(');
+        }
+    }
+
+    static async signOutUser(sessionId) { 
+        const session = await Sessions.findOne({
+            where: {
+                session_id: sessionId
+            }
+        })
+        if (session) {
+            await Sessions.destroy({
+                where: {
+                    session_id: sessionId
+                }
+            })
+        }
+        else {
+            throw new Error('401', 0, 'Invalid sessionID');
         }
     }
 
@@ -205,28 +222,33 @@ export default class UserService {
             return user;
         }
         else {
-            throw new Error (404, 0, 'Avatar url could not be found')
+            throw new Error (404, 0, 'Avatar url could not be found');
         }
     
     }
 
-    static async initAdditionalInfo(userId) {
+    static async initUserBio(userId) {
         const data = {id: userId}
-        console.log(data)
-        const additionalInfo = UserInfo.create(data)
+        const userBio = UserInfo.create(data);
     }
 
-    static async addAdditionalInfo(payload, userId) {
+    static async addUserBio(payload, userId) {
         const data = {id: userId, ...payload}
         const user = await UserInfo.findOne({
             where: {
                 id: userId
             }
         })
-        await user.update(data)
+        if (user) {
+            const updatedUser = await user.update(data);
+            return updatedUser;
+        }
+        else {
+            throw new Error(404, 0, 'UserBio could not be found!');
+        }
     }
 
-    static async getAdditionalInfo(userId) {
+    static async getUserBio(userId) {
         const user = await UserInfo.findOne({
             attributes: ['bio', 'github', 'linkedIn', 'twitter'],
             where: {
@@ -237,7 +259,7 @@ export default class UserService {
             return user;
         }
         else {
-            throw new Error (404, 0, 'Additional userInfo could not be found!')
+            throw new Error(404, 0, 'UserBio could not be found!');
         }
     }
 

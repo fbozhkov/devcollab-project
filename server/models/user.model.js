@@ -1,5 +1,9 @@
 import db from '../config/db.config.js'
 import { Sequelize, DataTypes } from "sequelize"
+import * as dotenv from 'dotenv'
+dotenv.config();
+
+const { SYNC_DB } = process.env;
 
 const User = db.sequelize.define (
     'Users',
@@ -34,6 +38,8 @@ const User = db.sequelize.define (
     }
 ) 
 
-User.sync()
+if (SYNC_DB === 'true') {
+    User.sync()
+}
 
 export default User

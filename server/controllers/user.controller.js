@@ -9,7 +9,6 @@ import UserService from "../services/user.service.js";
 const userController = express.Router();
 
 userController.post('/sign-up', async (req, res) => {
-    console.log(req.body);
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const userData = {
         email: req.body.email,
@@ -18,65 +17,57 @@ userController.post('/sign-up', async (req, res) => {
     }
     try {
         const user = await UserService.userSignUp(userData);
-        console.log('user')
-        console.log(user.dataValues.id)
-        await UserService.initAdditionalInfo(user.dataValues.id);
-        userData["success"] = 1;
-        res.status(200).json(userData);
+        await UserService.initUserBio(user.dataValues.id);
+        user["success"] = 1;
+        res.status(200).json(user);
     }
-    catch(e){
-        console.log('catch block');
-        console.log(e);
-        res.status(Number(e.status)).json(e);
-    }
-})
-
-userController.get('/test', async (req,res) => {
-    try {
-        const avatarResponse = await axios.get('https://ui-avatars.com/api/?background=random', { responseType: 'arraybuffer' })
-        res.set('Content-Type', avatarResponse.headers['content-type']);
-        res.status(200).send(avatarResponse.data);
-        let cld_upload_stream = cloudinary.v2.uploader.upload_stream(
-            {
-                folder: 'test'
-            },
-            (error, result) => {
-                console.log(error,result);
-                console.log(result.secure_url)
-            }
-        );
-        streamifier.createReadStream(avatarResponse.data).pipe(cld_upload_stream) 
-    }
-    catch(error) {
-        console.log(error)
+    catch(error){
+        res.status(Number(error.status)).json(error);
     }
 })
 
 userController.post('/sign-in', async (req,res) => {
-    console.log(req.body)
     try {
-        const auth = await UserService.signInUser(req.body.email, req.body.password)
-        res.cookie('sessionID', auth.session_id, { expires: auth.session_expiration_date, sameSite: 'None', secure: true, httpOnly: true })
-        res.status(200).json({'authentication': auth, 'message': 'Authentication succeeded!', 'success': 1})
+        const { user, newSession } = await UserService.signInUser(req.body.email, req.body.password);
+        const session = newSession.dataValues;
+        res.cookie('sessionID', session.session_id, { expires: session.session_expiration_date, sameSite: 'None', secure: true, httpOnly: true })
+        res.status(200).json({user, session, 'message': 'Authentication succeeded!', 'success': 1})
     }
-    catch(e) {
-        console.log(e)
-        res.status(Number(e.status)).json(e);
-    }
-})
-
-userController.put('/additionalInfo', authorizeUser, async (req,res) => {
-    try {
-        await UserService.addAdditionalInfo(req.body, req.userId)
-    }
-    catch(error){
+    catch(error) {
         console.log(error)
+        /* res.status(Number(error.status)).json(error); */
     }
 })
 
-userController.get('/log-out', async (req,res) => {
-    res.cookie('sessionID', 'none', { expires: new Date(Date.now()), sameSite: 'None', secure: true, httpOnly: true })
-    res.status(200).json({message: 'Successfully logged out'});
+userController.get('/sign-out', async (req,res) => {
+    try {
+        const cookie = req.headers.cookie;
+        const session = req.headers.cookie?.split(';').find(cookie => cookie.includes('sessionID'));
+        if (session) {
+            const sessionID = session.split("=")[1];
+            await UserService.signOutUser(sessionID);
+        }
+        res.cookie('sessionID', 'none', { expires: new Date(Date.now()), sameSite: 'None', secure: true, httpOnly: true })
+        res.status(200).json({ message: 'Successfully signed out' });
+    }
+    catch(error) {
+        res.status(Number(error.status)).json(error);
+    }
+})
+
+userController.put('/set-user-bio', authorizeUser, async (req,res) => {
+    try {
+        const user = await UserService.addUserBio(req.body, req.userId)
+        res.status(200).json({ message: 'Additional info added successfully' });
+    }
+    catch (error) {
+        if (error.status) {
+            res.status(Number(error.status)).json(error);
+        }
+        else {
+            res.status(500).json(error);
+        }
+    }
 })
 
 userController.put('/chageUserEmail', authorizeUser, async (req,res) => {
@@ -85,7 +76,6 @@ userController.put('/chageUserEmail', authorizeUser, async (req,res) => {
         res.status(200).json({message: 'Email changed successfully'})
     }
     catch(error) {
-        console.log(error)
         res.status(Number(error.status)).json(error);
     }
 })
@@ -96,14 +86,12 @@ userController.put('/changeUserPassword', authorizeUser, async (req,res) => {
         res.status(200).json({message: 'Password changed successfully'})
     }
     catch(error) {
-        console.log(error)
         res.status(Number(error.status)).json(error);
     }
 })
 
 userController.get('/getAllUsers', async (req, res) => {
     const users = await UserService.getAllUsers();
-    console.log('users?',users);
     if (users) {
         res.status(200).json(users);
     }
@@ -117,15 +105,12 @@ userController.get('/validateUser', async (req, res) => {
     const session = req.headers.cookie?.split(';').find( cookie => cookie.includes('sessionID'));
     if(session) {
         const sessionID = session.split("=")[1];
-        console.log(`sessionID: ${sessionID}`)
         try {
             const user = await UserService.validateUserSession(sessionID)
             user.dataValues['success'] = 1;
-            console.log(user)
             res.status(200).json(user);
         }
         catch(error){
-            console.log(`error: ${error.message}`)
             res.status(error.status).json(error.message);
         }
     }
@@ -144,7 +129,7 @@ userController.get('/getUserData', async (req,res) => {
             res.status(200).json(userData)
         }
         catch(error){
-            console.log(`error: ${error.message}`);
+            res.status(Number(error.status)).json(error);
         }
     }
     else {
@@ -158,18 +143,16 @@ userController.get('/getUserAvatar/:id', async (req,res) => {
         res.status(200).json(avatar);
     }
     catch(error){
-        console.log(error)
         res.status(Number(error.status)).json(error);
     }
 })
 
-userController.get('/getAdditionalInfo/:id', async (req, res) => {
+userController.get('/getUserBio/:id', async (req, res) => {
     try {
-        const userInfo = await UserService.getAdditionalInfo(req.params['id'])
+        const userInfo = await UserService.getUserBio(req.params['id'])
         res.status(200).json(userInfo);
     }
     catch (error) {
-        console.log(error)
         res.status(Number(error.status)).json(error);
     }
 })

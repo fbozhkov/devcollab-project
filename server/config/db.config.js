@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize'
 import * as dotenv from 'dotenv'
 dotenv.config();
 
-const { DB_HOST, DB_USERNAME, DB_PASSWORD, NODE_ENV } = process.env;
+const { DB_HOST, DB_USERNAME, DB_PASSWORD, DB_TEST_NAME, NODE_ENV } = process.env;
 
 const config = {
   "development": {
@@ -12,10 +12,10 @@ const config = {
       "host": DB_HOST
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "sequelize_database_test",
-    "host": "127.0.0.1"
+    "username": DB_USERNAME,
+    "password": DB_PASSWORD,
+    "database": DB_TEST_NAME,
+    "host": DB_HOST
   },
   "production": {
     "username": "root",
@@ -58,7 +58,8 @@ console.log(`NODE_ENV = ${process.env.NODE_ENV}`)
 
 try {
   await sequelize.authenticate();
-  console.log('Connection has been established successfully.');
+  console.log('Connection with database has been established successfully.');
+  console.log(`NODE_ENV = ${process.env.NODE_ENV} Database: ${config[NODE_ENV]}`)
 } catch (error) {
   console.error('Unable to connect to the database:', error);
 }

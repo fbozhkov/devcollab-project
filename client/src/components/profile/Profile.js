@@ -1,53 +1,34 @@
 import React, {useState, useEffect} from "react";
-import { Typography, Avatar, Button, TextField, Paper } from "@mui/material";
-import styles from './profile.module.scss'
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserId, getUsername } from "../../redux/auth/selectors";
+import { getUserAvatarSelector, getUserBioSelector } from "../../redux/my-profile";
+import { getUserAvatar, getUserBio } from "../../redux/my-profile";
+import { Typography, Avatar, Button, Paper, CircularProgress, IconButton } from "@mui/material";
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import styles from './profile.module.scss';
 import EditProfileDialog from "../about/EditProfileDialog";
 
-const baseUrl = process.env.REACT_APP_API;
-
-const Profile = (props) => {
-    const [userData, setUserData] = useState({})
+const Profile = () => {
     const [dataIsLoaded, setDataIsLoaded] = useState(false)
-    const [userAvatar, setUserAvatar] = useState(null)
-    const [additionalInfo, setAdditionalInfo] = useState({})
     const [openEditProfile, setOpenEditProfile] = useState(false)
+    
+    const dispatch = useDispatch()
+    const userId = useSelector(getUserId)
+    const userName = useSelector(getUsername)
+    const userAvatar = useSelector(getUserAvatarSelector)
+    const userBio = useSelector(getUserBioSelector)
 
     useEffect(() => {
-        getUserData()
+        profileApiCall();
     }, [])
 
-    const getUserData = async() => {
-        try {
-            const response = await axios.get(`${baseUrl}/api/users/getUserData`, { withCredentials: true })
-            setUserData(response.data);
-            getUserAvatar(response.data.id);
-            getAdditionalInfo(response.data.id);
-        }
-        catch(error) {
-            window.localStorage.removeItem('uli');
-        }
-    }
-
-    const getUserAvatar = (id) => {
-        axios.get(`${baseUrl}/api/users/getUserAvatar/${id}`, { withCredentials: true })
-            .then((response) => {
-                setUserAvatar(response.data.avatar_url);
-                setDataIsLoaded(true)             
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-    }
-
-    const getAdditionalInfo = (id) => {
-        axios.get(`${baseUrl}/api/users/getAdditionalInfo/${id}`)
-            .then((response) => {
-                setAdditionalInfo(response.data)
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+    const profileApiCall = async () => {
+        await Promise.all([dispatch(getUserAvatar(userId)), dispatch(getUserBio(userId))]);
+        console.log('Updated userAvatar:', userAvatar);
+        console.log('Updated userBio:', userBio);
+        setDataIsLoaded(true);
     }
 
     const handleEditProfile = () => {
@@ -62,17 +43,28 @@ const Profile = (props) => {
                     <div className={styles['profile-heading-div']}>
                         <div className={styles['avatar-and-username']}>
                             <Avatar className={styles['avatar']} alt="img" src={userAvatar} />
-                            <Typography className={styles['profile-heading-text']}> {userData.username}</Typography>
+                            <Typography className={styles['profile-heading-text']}> {userName}</Typography>
+                            <div className={styles['social-media-div']}>
+                                <IconButton className={styles['social-media-icon']} href={userBio.github} target="_blank">
+                                    <GitHubIcon />
+                                </IconButton>
+                                <IconButton className={styles['social-media-icon']} href={userBio.linkedIn} target="_blank">
+                                    <LinkedInIcon />
+                                </IconButton>
+                                <IconButton className={styles['social-media-icon']} href={userBio.twitter} target="_blank">
+                                    <TwitterIcon />
+                                </IconButton>
+                            </div>
                         </div>
                         <div className={styles['edit-profile-div']}>
                             <div className={styles['edit-profile-button-div']}>
                                 <Button onClick={handleEditProfile}>Edit Profile</Button>
-                                    <EditProfileDialog data={additionalInfo} open={openEditProfile} setOpen={setOpenEditProfile}/>
+                                    <EditProfileDialog open={openEditProfile} setOpen={setOpenEditProfile}/>
                             </div>
                             <div className={styles['edit-profile-info-div']}>
                                 <div className={styles['edit-profile-info-bio-div']}>
                                     <Typography className={styles['edit-profile-info-bio-text']}>
-                                        {additionalInfo.bio}
+                                        {userBio.bio}
                                     </Typography>
                                 </div>
                                 
@@ -82,9 +74,13 @@ const Profile = (props) => {
                 </Paper>   
             </div>
                 
-            : null }
+            : 
+            <div className={styles['loading-div']}>
+                <CircularProgress />
+            </div> }
         </div>
     )
 }
 
 export default Profile
+
