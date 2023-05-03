@@ -115,7 +115,7 @@ userController.get('/validateUser', async (req, res) => {
         }
     }
     else {
-        res.status(404).json({'message' : 'No user session found', 'success': 0})
+        res.status(401).json({'message' : 'No user session found', 'success': 0})
     }
 })
 

@@ -1,11 +1,14 @@
 export {
     LOGINSUCCESS,
     LOGINFAILED,
-    LOGOUT
+    LOGOUT,
+    AUTHSUCCESS,
+    AUTHFAILED
 } from './actionTypes';
 export {
     loginRequest,
-    logout
+    logout,
+    authenticate
 } from './actions';
 export {
     getIsLoggedIn,

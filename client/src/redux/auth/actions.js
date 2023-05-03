@@ -1,7 +1,9 @@
 import {
     LOGINSUCCESS,
     LOGINFAILED,
-    LOGOUT
+    LOGOUT,
+    AUTHSUCCESS,
+    AUTHFAILED
 } from './actionTypes';
 import axios from 'axios';
 import { baseUrl } from '../../utils/apiBaseUrl'
@@ -38,4 +40,23 @@ export const logout = () => (dispatch) => {
     dispatch({
         type: LOGOUT,
     });
+}
+
+export const authenticate = () => (dispatch) => {
+    axios.get(`${baseUrl}/api/users/validateUser`, { withCredentials: true })
+        .then((response) => {
+            const auth = response.data;
+            dispatch({
+                type: AUTHSUCCESS
+            });
+        }
+        )
+        .catch((error) => {
+            const errorMessage = error.response.data.message;
+            dispatch({
+                type: AUTHFAILED,
+                payload: errorMessage
+            });
+        }
+        );
 }
