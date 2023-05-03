@@ -82,6 +82,7 @@ const EditProfileDialog = (props) => {
                         <div className={styles['edit-profile-info-icon-textfield']}>
                             <LinkedInIcon className={styles['icon']} />
                             <TextField
+                                value={linkedIn}
                                 size="small"
                                 placeholder="LinkedIn"
                                 onChange={handleLinkedIn} />
@@ -89,6 +90,7 @@ const EditProfileDialog = (props) => {
                         <div className={styles['edit-profile-info-icon-textfield']}>
                             <TwitterIcon className={styles['icon']} />
                             <TextField
+                                value={twitter}
                                 size="small"
                                 placeholder="Twitter"
                                 onChange={handleTwitter} />
