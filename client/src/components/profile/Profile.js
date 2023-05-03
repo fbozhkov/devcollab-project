@@ -8,7 +8,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import styles from './profile.module.scss';
-import EditProfileDialog from "../about/EditProfileDialog";
+import EditProfileDialog from "./EditProfileDialog";
 
 const Profile = () => {
     const [dataIsLoaded, setDataIsLoaded] = useState(false)

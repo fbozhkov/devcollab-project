@@ -1,3 +1,5 @@
+@import '../../shared/colors.scss';
+
 .tabs {
     border-right: 1;
     border-color: gray;
@@ -9,34 +11,22 @@
     width: 100%
 }
 
-.edit-profile-info-textfield-divlog {
-    width: 400px   
-}
-.edit-profile-info-div {
-    display: flex;
-    flex-direction: column;
-    padding-left: 32px;
-    padding-right: 32px;
+.wrapper {
+    background-color: $main-background-color;
+    min-height: 100vh;
+    padding-bottom: 32px;
 }
 
-.edit-profile-info-heading-div {
-    align-self: flex-start;
+.about-container {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-.edit-profile-info-heading-text {
-    font-weight: 600;
+.about-heading {
+    
 }
 
-.edit-profile-info-links-div {
-    margin-top: 24px;
-}
-
-.edit-profile-info-icon-textfield {
-    margin-bottom: 8px;
-}
-
-.icon {
-    font-size: 38px;
-    margin-right: 4px;
+.about-content {
+    padding-top: 32px;
 }
 

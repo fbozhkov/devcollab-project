@@ -88,3 +88,35 @@
 .loading-div {
     padding-top: 48px;
 }
+
+.edit-profile-info-textfield-divlog {
+    width: 400px
+}
+
+.edit-profile-info-div {
+    display: flex;
+    flex-direction: column;
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+.edit-profile-info-heading-div {
+    align-self: flex-start;
+}
+
+.edit-profile-info-heading-text {
+    font-weight: 600;
+}
+
+.edit-profile-info-links-div {
+    margin-top: 24px;
+}
+
+.edit-profile-info-icon-textfield {
+    margin-bottom: 8px;
+}
+
+.icon {
+    font-size: 38px;
+    margin-right: 4px;
+}

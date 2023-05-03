@@ -7,7 +7,7 @@ import { Button, Box, Dialog, DialogActions, DialogContent, TextField, Typograph
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import styles from './about.module.scss'
+import styles from './profile.module.scss'
 
 const baseUrl = process.env.REACT_APP_API;
 
