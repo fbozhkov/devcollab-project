@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch ,useSelector } from 'react-redux';
 import { getIsLoggedIn } from '../../redux/auth';
-import { logout } from "../../redux/auth";
+import { authenticate,logout } from "../../redux/auth";
 import { Button , Menu, MenuItem, IconButton} from '@mui/material'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from 'react-router-dom';
@@ -16,6 +16,10 @@ const Navbar = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const userIsLogged = useSelector(getIsLoggedIn);
+
+    useEffect(() => {
+        dispatch(authenticate());
+    }, [])
 
     const logOut = () => {
         handleClose();

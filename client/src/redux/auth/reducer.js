@@ -1,5 +1,5 @@
 import { createReducer } from "../../utils/reducerUtils";
-import { LOGINSUCCESS, LOGINFAILED, LOGOUT } from './actionTypes';
+import { LOGINSUCCESS, LOGINFAILED, LOGOUT, AUTHSUCCESS, AUTHFAILED } from './actionTypes';
 
 const defaultState = {
     isLoggedIn: false,
@@ -17,9 +17,15 @@ const entityHandlers = {
         const error = action;
         return { ...state, error }
     },
-    [LOGOUT]: (state) => {
+    [LOGOUT]: () => {
         return { ...defaultState };
     },
+    [AUTHSUCCESS] : (state) => {
+        return { ...state }
+    },
+    [AUTHFAILED] : () => {
+        return { ...defaultState }
+    }
 };
 
 export const reducer = createReducer(defaultState, entityHandlers);
