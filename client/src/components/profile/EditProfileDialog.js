@@ -7,7 +7,7 @@ import { Button, Box, Dialog, DialogActions, DialogContent, TextField, Typograph
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import styles from './about.module.scss'
+import styles from './profile.module.scss'
 
 const baseUrl = process.env.REACT_APP_API;
 
@@ -82,6 +82,7 @@ const EditProfileDialog = (props) => {
                         <div className={styles['edit-profile-info-icon-textfield']}>
                             <LinkedInIcon className={styles['icon']} />
                             <TextField
+                                value={linkedIn}
                                 size="small"
                                 placeholder="LinkedIn"
                                 onChange={handleLinkedIn} />
@@ -89,6 +90,7 @@ const EditProfileDialog = (props) => {
                         <div className={styles['edit-profile-info-icon-textfield']}>
                             <TwitterIcon className={styles['icon']} />
                             <TextField
+                                value={twitter}
                                 size="small"
                                 placeholder="Twitter"
                                 onChange={handleTwitter} />

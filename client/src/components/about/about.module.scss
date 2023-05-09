@@ -1,3 +1,5 @@
+@import '../../shared/colors.scss';
+
 .tabs {
     border-right: 1;
     border-color: gray;
@@ -9,34 +11,95 @@
     width: 100%
 }
 
-.edit-profile-info-textfield-divlog {
-    width: 400px   
-}
-.edit-profile-info-div {
-    display: flex;
-    flex-direction: column;
-    padding-left: 32px;
-    padding-right: 32px;
+.wrapper {
+    background: rgb(210,204,254);
+    background: linear-gradient(90deg, rgba(210,204,254,1) 10%, rgba(99,230,255,1) 43%, rgba(255,255,255,1) 90%);min-height: 80vh;
+    /* height: 100vh; */
+    padding-bottom: 32px;
 }
 
-.edit-profile-info-heading-div {
-    align-self: flex-start;
+.about-container {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-.edit-profile-info-heading-text {
-    font-weight: 600;
+.about-heading {
+    
 }
 
-.edit-profile-info-links-div {
-    margin-top: 24px;
+.about-content {
+    max-width: 1440px;
+        margin: 0 auto;
+        padding-top: 32px;
+    
+        @media (max-width: 900px) {
+            max-width: 80%;
+        }
 }
 
-.edit-profile-info-icon-textfield {
-    margin-bottom: 8px;
+.cubes-create-projects {
+    height: 100%;
+    width: 100%;
+    background-image: url(../mainpage/Cube8L.png), url(../mainpage/Cube4R.png);
+    background-repeat: no-repeat, no-repeat;
+    background-size: 187px 187px, 221px 229px;
+    background-position-x: calc(50% - 450px), calc(50% + 450px);
+    background-position-y: 300px, 270px;
+
+    @media (max-width: 900px) {
+        background-image: url(../mainpage/Cube4Rotate.png);
+        background-size: 200px 200px;
+        background-position-x: calc(50% + 25vw);
+        background-position-y: 280px;
+    }
+
+    @media (max-width: 700px) {
+        background-image: url(../mainpage/Cube4Rotate.png);
+        background-size: 0px 0px;
+        background-position-x: calc(50% + 100px);
+        background-position-y: 280px;
+    }
 }
 
-.icon {
-    font-size: 38px;
-    margin-right: 4px;
+.create-projects-button-div {
+    padding-top: 140px;
+    height: 200px;
+
+    @media (max-width: 900px) {
+        padding-top: 40px;
+        padding-left: 80px;
+    }
+
+    @media (max-width: 700px) {
+        padding: 40px 0px;
+        display: flex;
+        justify-content: center;
+    }
 }
 
+.create-projects-button {
+    text-transform: none;
+    color: $plain-white;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 32px;
+    letter-spacing: -0.02em;
+    background-color: $projects-button;
+    border-radius: 88px;
+    width: 480px;
+    height: 50px;
+
+    &:hover {
+        background-color: $projects-button-hover;
+    }
+
+    @media(max-width: 900px) {
+        font-size: 15px;
+        line-height: 16px;
+        letter-spacing: 0.05;
+        display: flex;
+
+        height: 40px;
+        width: 207px;
+    }
+}
