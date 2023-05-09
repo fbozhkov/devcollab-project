@@ -6,7 +6,6 @@ import axios from "axios";
 import { baseUrl } from "../../utils/apiBaseUrl"
 import Protected from "../protected/Protected";
 
-console.warn(`baseUrl: ${baseUrl}`)
 const techStack = ['java', 'javascript', 'react', 'node.js', 'python'];
 const CreateProject = () => {
     const [loading, setLoading] = useState(true);
